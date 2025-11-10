@@ -4,41 +4,14 @@
     <meta charset="UTF-8">
     <title>Deviation Statement</title>
     <style>
-      body {
-    font-family: Calibri, sans-serif;
-    font-size: 9pt;
-    margin: 0;
-}
-
-.container {
-    width: 275mm; /* Maximized for A4 landscape (297mm - 11mm left - 11mm right) */
-    min-height: 188mm;
-    margin: 10mm 11mm 10mm 11mm; /* Uniform 10-11mm margins */
-    padding: 0;
-    box-sizing: border-box;
-}
-
-table {
-    width: 100%;
-    max-width: 275mm;
-    border-collapse: collapse;
-    table-layout: fixed;
-}
-
-th, td {
-    border: 1px solid black;
-    padding: 5px;
-    text-align: left;
-    vertical-align: top;
-    overflow: hidden;
-}
-
-.header {
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-
+        @page { size: A4 landscape; margin: 10mm 11mm; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Calibri, sans-serif; font-size: 8pt; margin: 0; line-height: 1.2; }
+        .container { width: 275mm; min-height: 188mm; margin: 0; padding: 0; }
+        table { width: 275mm; border-collapse: collapse; table-layout: fixed; font-size: 8pt; }
+        th, td { border: 1px solid black; padding: 3px 2px; text-align: left; vertical-align: top; overflow: hidden; word-wrap: break-word; }
+        .header { text-align: center; margin-bottom: 8px; }
+        .header h2 { font-size: 11pt; margin-bottom: 4px; }
     </style>
 </head>
 <body>
@@ -47,23 +20,36 @@ th, td {
             <h2>Deviation Statement</h2>
         </div>
         <table>
+            <colgroup>
+                <col style="width: 6mm;">
+                <col style="width: 118mm;">
+                <col style="width: 10.5mm;">
+                <col style="width: 10.5mm;">
+                <col style="width: 10.5mm;">
+                <col style="width: 10.5mm;">
+                <col style="width: 10.5mm;">
+                <col style="width: 10.5mm;">
+                <col style="width: 10.5mm;">
+                <col style="width: 10.5mm;">
+                <col style="width: 10.5mm;">
+                <col style="width: 10.5mm;">
+                <col style="width: 48mm;">
+            </colgroup>
             <thead>
                 <tr>
-                    <th width="6.2mm">ITEM No.</th>
-                    <th width="98mm">Description</th>
-                    <th width="10.3mm">Unit</th>
-                    <th width="10.3mm">Qty as per Work Order</th>
-                    <th width="10.3mm">Rate</th>
-                    <th width="10.3mm">Amt as per Work Order Rs.</th>
-                    <th width="10.3mm">Qty Executed</th>
-                    <th width="10.3mm">Amt as per Executed Rs.</th>
-                    <th width="10.3mm">Excess Qty</th>
-                    <th width="10.3mm">Excess Amt Rs.</th>
-                    <th width="10.3mm">Saving Qty</th>
-                    <th width="10.3mm">Saving Amt Rs.</th>
-                    <th width="47.5mm">REMARKS/ REASON.</th>
-                </tr>
-                
+                    <th>ITEM No.</th>
+                    <th>Description</th>
+                    <th>Unit</th>
+                    <th>Qty as per Work Order</th>
+                    <th>Rate</th>
+                    <th>Amt as per Work Order Rs.</th>
+                    <th>Qty Executed</th>
+                    <th>Amt as per Executed Rs.</th>
+                    <th>Excess Qty</th>
+                    <th>Excess Amt Rs.</th>
+                    <th>Saving Qty</th>
+                    <th>Saving Amt Rs.</th>
+                    <th>REMARKS/ REASON.</th>
                 </tr>
             </thead>
             <tbody>
@@ -160,7 +146,7 @@ th, td {
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{ '%0.2f%%' | format((data.summary.overall_excess / data.summary.work_order_total * 100) if data.summary.work_order_total else 0) }}</td>
+                    <td>{{ '%0.2f%%' | format(((data.summary.overall_excess | float) / (data.summary.work_order_total | float) * 100) if (data.summary.work_order_total | float) > 0 else 0) }}</td>
                     <td></td>
                     <td></td>
                     <td></td>

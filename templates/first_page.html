@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <title>CONTRACTOR BILL</title>
     <style>
-        body { font-family: Calibri, sans-serif; font-size: 9pt; margin: 0; }
-        .container { width: 188mm; min-height: 277mm; margin: 10mm 11mm; padding: 0; box-sizing: border-box; }
-        table { width: 100%; max-width: 188mm; border-collapse: collapse; table-layout: fixed; }
-        th, td { border: 1px solid black; padding: 5px; text-align: left; vertical-align: top; overflow: hidden; }
-        .header { text-align: left; margin-bottom: 10px; }
-        .header p { margin: 2px 0; }
+        @page { size: A4 portrait; margin: 10mm 11mm; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Calibri, sans-serif; font-size: 8pt; margin: 0; line-height: 1.2; }
+        .container { width: 188mm; min-height: 277mm; margin: 0; padding: 0; }
+        table { width: 188mm; border-collapse: collapse; table-layout: fixed; font-size: 8pt; }
+        th, td { border: 1px solid black; padding: 3px 2px; text-align: left; vertical-align: top; overflow: hidden; word-wrap: break-word; }
+        .header { text-align: left; margin-bottom: 8px; }
+        .header h2 { font-size: 11pt; margin-bottom: 4px; }
+        .header p { margin: 1px 0; font-size: 8pt; }
         .bold { font-weight: bold; }
         .underline { text-decoration: underline; }
+        .center-align { text-align: center; }
     </style>
 </head>
 <body>
@@ -36,17 +40,28 @@
             {% endfor %}
         </div>
         <table>
+            <colgroup>
+                <col style="width: 10.06mm;">
+                <col style="width: 13.76mm;">
+                <col style="width: 13.76mm;">
+                <col style="width: 9.55mm;">
+                <col style="width: 63.83mm;">
+                <col style="width: 13.16mm;">
+                <col style="width: 19.53mm;">
+                <col style="width: 15.15mm;">
+                <col style="width: 11.96mm;">
+            </colgroup>
             <thead>
                 <tr>
-                    <th width="12.2mm">Unit</th>
-                    <th width="16.7mm">Quantity executed (or supplied) since last certificate</th>
-                    <th width="16.7mm">Quantity executed (or supplied) upto date as per MB</th>
-                    <th width="11.6mm">Item No.</th>
-                    <th width="77.5mm">Item of Work supplies (Grouped under "sub-head" and "sub work" of estimate)</th>
-                    <th width="16mm">Rate</th>
-                    <th width="23.7mm">Amount upto date</th>
-                    <th width="18.4mm">Amount Since previous bill (Total for each sub-head)</th>
-                    <th width="14.5mm">Remark</th>
+                    <th>Unit</th>
+                    <th>Quantity executed (or supplied) since last certificate</th>
+                    <th>Quantity executed (or supplied) upto date as per MB</th>
+                    <th>S. No.</th>
+                    <th>Item of Work supplies (Grouped under "sub-head" and "sub work" of estimate)</th>
+                    <th>Rate</th>
+                    <th>Upto date Amount</th>
+                    <th>Amount Since previous bill (Total for each sub-head)</th>
+                    <th>Remarks</th>
                 </tr>
             </thead>
             <tbody>
@@ -81,7 +96,7 @@
                 </tr>               
                 <tr>
                     <td></td>
-                    <td class="center-align">{{ data.totals.extra_items_sum if data.totals.extra_items_sum is not none and data.totals.extra_items_sum > 0 else 'NIL' }}</td>
+                    <td class="center-align">{{ data.totals.get('extra_items_sum', 'NIL') if data.totals.get('extra_items_sum') and data.totals.get('extra_items_sum') > 0 else 'NIL' }}</td>
                     <td></td>
                     <td></td>
                     <td>Sum of Extra Items (including Tender Premium) (See on Left) Rs.</td>

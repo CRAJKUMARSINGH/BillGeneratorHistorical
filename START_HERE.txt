@@ -1,0 +1,43 @@
+================================================================================
+                    ARCHIVE APPS - START HERE
+================================================================================
+
+EASIEST METHOD - Just 3 Steps:
+
+1. Find this file: ARCHIVE_APPS.bat
+   (It's in the same folder as this file)
+
+2. Double-click ARCHIVE_APPS.bat
+
+3. Press any key when it asks
+
+That's it! Wait 5-10 minutes and you're done.
+
+================================================================================
+
+WHAT IT DOES:
+
+✅ Copies 7 apps to: C:\Users\Rajkumar\Stream-Bill-Apps-ARCHIVED
+✅ Keeps Stream-Bill-App_Main (the best one)
+✅ Original folders stay (you delete them later if you want)
+✅ Safe - you can restore anytime
+
+================================================================================
+
+AFTER ARCHIVING:
+
+1. Test main app:
+   cd C:\Users\Rajkumar\Stream-Bill-App_Main
+   python scripts\test_pdf_generation_comprehensive.py
+
+2. Use main app for 1 week
+
+3. If everything works, delete original 7 folders
+
+================================================================================
+
+NEED HELP?
+
+Read: HOW_TO_ARCHIVE.md (detailed guide)
+
+================================================================================
