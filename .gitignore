@@ -46,11 +46,10 @@ Thumbs.db
 
 # Output files
 All_Outputs/
-exports/
 test_outputs/
+uploaded_outputs/
+batch_outputs/
 *.pdf
-*.xlsx
-*.xls
 
 # Logs
 *.log
