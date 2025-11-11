@@ -286,9 +286,18 @@ def main():
             margin: 0.5rem 0 0 0;
         }
         
-        /* Sidebar Styling */
+        /* Sidebar Styling - Colorful! */
         [data-testid="stSidebar"] {
-            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        }
+        [data-testid="stSidebar"] * {
+            color: white !important;
+        }
+        [data-testid="stSidebar"] .stRadio > label {
+            color: white !important;
+        }
+        [data-testid="stSidebar"] hr {
+            border-color: rgba(255, 255, 255, 0.3) !important;
         }
         
         /* Button Styling */
@@ -355,13 +364,18 @@ def main():
     st.sidebar.markdown("### ⚙️ Processing Options")
     
     # Info box in sidebar
-    st.sidebar.info("""
-    **✨ Features:**
-    - 📄 Zero-shrinking PDFs
-    - 🎨 Professional formatting
-    - 📦 Batch processing
-    - ⬇️ Instant downloads
-    """)
+    st.sidebar.markdown("""
+        <div style='background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px; 
+                    border-left: 4px solid #ffd700; margin: 1rem 0;'>
+            <p style='margin: 0; color: white; font-weight: 600;'>✨ Features:</p>
+            <ul style='margin: 0.5rem 0; padding-left: 1.5rem; color: white;'>
+                <li>📄 Zero-shrinking PDFs</li>
+                <li>🎨 Professional formatting</li>
+                <li>📦 Batch processing</li>
+                <li>⬇️ Instant downloads</li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
     
     mode = st.sidebar.radio(
         "Select Processing Mode",
@@ -372,14 +386,14 @@ def main():
     # Add footer to sidebar with credits
     st.sidebar.markdown("---")
     st.sidebar.markdown("""
-        <div style='text-align: center; color: #7f8c8d; font-size: 0.85rem;'>
+        <div style='text-align: center; color: white; font-size: 0.85rem;'>
             <p style='margin: 0.3rem 0;'><strong>Bill Generator Pro</strong></p>
-            <p style='margin: 0.3rem 0;'>Powered by Chrome Headless</p>
-            <p style='margin: 0.3rem 0;'>Version 2.0</p>
-            <hr style='margin: 0.8rem 0; border: none; border-top: 1px solid #bdc3c7;'>
+            <p style='margin: 0.3rem 0; opacity: 0.9;'>Powered by Chrome Headless</p>
+            <p style='margin: 0.3rem 0; opacity: 0.9;'>Version 2.0</p>
+            <hr style='margin: 0.8rem 0; border: none; border-top: 1px solid rgba(255,255,255,0.3);'>
             <p style='margin: 0.3rem 0; font-size: 0.75rem;'><strong>🌟 Prepared on Initiative of:</strong></p>
-            <p style='margin: 0.3rem 0; color: #f39c12; font-weight: 600; font-size: 0.85rem;'>Mrs. Premlata Jain, AAO</p>
-            <p style='margin: 0.3rem 0; font-size: 0.75rem;'>PWD Udaipur</p>
+            <p style='margin: 0.3rem 0; color: #ffd700; font-weight: 600; font-size: 0.85rem;'>Mrs. Premlata Jain, AAO</p>
+            <p style='margin: 0.3rem 0; font-size: 0.75rem; opacity: 0.9;'>PWD Udaipur</p>
         </div>
     """, unsafe_allow_html=True)
     
