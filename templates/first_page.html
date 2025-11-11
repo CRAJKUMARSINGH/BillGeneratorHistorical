@@ -6,7 +6,19 @@
     <style>
         @page { 
             size: A4 portrait; 
-            margin: 10mm; 
+            margin: 10mm;
+        }
+        @media print {
+            html, body {
+                width: 190mm !important;
+                min-width: 190mm !important;
+                max-width: 190mm !important;
+            }
+            table {
+                width: 190mm !important;
+                min-width: 190mm !important;
+                max-width: 190mm !important;
+            }
         }
         * { 
             margin: 0; 
@@ -32,6 +44,16 @@
             min-width: 190mm !important;
             transform: scale(1.0) !important;
             transform-origin: top left !important;
+            overflow-x: visible !important;
+        }
+        .container { 
+            width: 190mm !important; 
+            max-width: 190mm !important;
+            min-width: 190mm !important;
+            min-height: 277mm; 
+            margin: 0; 
+            padding: 0;
+            transform: scale(1.0) !important;
         }
         .container { 
             width: 190mm; 
@@ -41,10 +63,13 @@
             padding: 0; 
         }
         table { 
-            width: 100% !important; 
+            width: 190mm !important;
+            min-width: 190mm !important;
+            max-width: 190mm !important;
             border-collapse: collapse; 
             table-layout: fixed !important; 
             font-size: 8pt;
+            transform: scale(1.0) !important;
         }
         /* FORCE exact column widths - NO SHRINKING POSSIBLE */
         table th:nth-child(1), table td:nth-child(1) { width: 25mm !important; min-width: 25mm !important; max-width: 25mm !important; }

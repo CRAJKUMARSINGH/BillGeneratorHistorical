@@ -69,10 +69,12 @@ def generate_pdf_from_html(html_path, pdf_path):
         except Exception as e:
             print(f"Chrome exception: {str(e)}")
     
-    # Fallback to wkhtmltopdf
+    # Fallback to wkhtmltopdf with MAXIMUM anti-shrinking
     try:
+        print(f"⚠️ Chrome not available, using wkhtmltopdf fallback")
         orientation = "Landscape" if "deviation" in str(html_path) else "Portrait"
         
+        # ULTIMATE ANTI-SHRINKING WKHTMLTOPDF COMMAND
         cmd = [
             'wkhtmltopdf',
             '--enable-local-file-access',
@@ -82,27 +84,35 @@ def generate_pdf_from_html(html_path, pdf_path):
             '--margin-left', '10mm',
             '--margin-right', '10mm',
             '--orientation', orientation,
-            '--disable-smart-shrinking',
-            '--zoom', '1.0',
-            '--dpi', '96',
+            '--disable-smart-shrinking',  # CRITICAL!
+            '--zoom', '1.0',              # CRITICAL!
+            '--dpi', '96',                # CRITICAL!
             '--print-media-type',
-            '--no-header-line',  # Remove header line
-            '--no-footer-line',  # Remove footer line
+            '--no-header-line',
+            '--no-footer-line',
+            '--encoding', 'UTF-8',
+            '--enable-javascript',
+            '--javascript-delay', '1000',
+            '--no-stop-slow-scripts',
+            '--viewport-size', '1280x1024',
+            '--minimum-font-size', '1',
             str(html_path),
             str(pdf_path)
         ]
         
+        print(f"Running: {' '.join(cmd[:10])}...")
         result = subprocess.run(cmd, capture_output=True, timeout=60)
         
         if result.returncode == 0 and os.path.exists(pdf_path):
             print(f"✅ PDF generated with wkhtmltopdf: {pdf_path}")
             return True
         else:
-            print(f"wkhtmltopdf error: {result.stderr.decode() if result.stderr else 'Unknown'}")
+            error_msg = result.stderr.decode() if result.stderr else 'Unknown'
+            print(f"❌ wkhtmltopdf error: {error_msg}")
             return False
             
     except Exception as e:
-        print(f"PDF generation failed: {str(e)}")
+        print(f"❌ PDF generation failed: {str(e)}")
         return False
 
 def create_zip_file(files, zip_path):

@@ -6,7 +6,19 @@
     <style>
         @page { 
             size: A4 landscape; 
-            margin: 10mm; 
+            margin: 10mm;
+        }
+        @media print {
+            html, body {
+                width: 277mm !important;
+                min-width: 277mm !important;
+                max-width: 277mm !important;
+            }
+            table {
+                width: 277mm !important;
+                min-width: 277mm !important;
+                max-width: 277mm !important;
+            }
         }
         * { 
             margin: 0; 
@@ -16,29 +28,37 @@
             print-color-adjust: exact !important;
         }
         html {
-            zoom: 1.0;
-            -webkit-text-size-adjust: none;
+            zoom: 1.0 !important;
+            -webkit-text-size-adjust: none !important;
         }
         body { 
             font-family: Calibri, sans-serif; 
             font-size: 8pt; 
             margin: 0; 
             line-height: 1.2;
-            width: 277mm;
-            max-width: 277mm;
+            width: 277mm !important;
+            max-width: 277mm !important;
+            min-width: 277mm !important;
+            transform: scale(1.0) !important;
+            overflow-x: visible !important;
         }
         .container { 
-            width: 277mm; 
-            max-width: 277mm;
+            width: 277mm !important;
+            max-width: 277mm !important;
+            min-width: 277mm !important;
             min-height: 190mm; 
             margin: 0; 
-            padding: 0; 
+            padding: 0;
+            transform: scale(1.0) !important;
         }
         table { 
-            width: 100% !important; 
+            width: 277mm !important;
+            min-width: 277mm !important;
+            max-width: 277mm !important;
             border-collapse: collapse; 
             table-layout: fixed !important; 
             font-size: 8pt;
+            transform: scale(1.0) !important;
         }
         /* FORCE exact column widths for deviation statement - NO SHRINKING */
         table th:nth-child(1), table td:nth-child(1) { width: 20mm !important; min-width: 20mm !important; max-width: 20mm !important; }
