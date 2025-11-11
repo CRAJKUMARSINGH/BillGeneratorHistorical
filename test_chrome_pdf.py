@@ -51,6 +51,7 @@ cmd = [
     '--no-margins',
     '--disable-smart-shrinking',
     '--run-all-compositor-stages-before-draw',
+    '--no-pdf-header-footer',  # REMOVE TIMESTAMP AND FILE PATH
     '--print-to-pdf=' + str(pdf_path.absolute()),
     'file:///' + str(html_path.absolute()).replace('\\', '/')
 ]

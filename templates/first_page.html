@@ -148,12 +148,14 @@
                     <td></td>
                 </tr>               
                 <tr>
-                    <td colspan="4" class="center-align">{{ data.totals.get('extra_items_sum', 'NIL') if data.totals.get('extra_items_sum') and data.totals.get('extra_items_sum') > 0 else 'NIL' }}</td>
-                    <td>Sum of Extra Items (including Tender Premium) (See on Left) Rs.</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td colspan="9" style="text-align: left; padding-left: 10px;">
+                        Sum of Extra Items (including Tender Premium): 
+                        {% if data.totals.get('extra_items_sum') and data.totals.get('extra_items_sum') > 0 %}
+                            Rs. {{ data.totals.extra_items_sum }}
+                        {% else %}
+                            NIL
+                        {% endif %}
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="4"></td>

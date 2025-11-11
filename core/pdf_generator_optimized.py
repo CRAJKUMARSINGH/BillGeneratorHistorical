@@ -535,7 +535,7 @@ class PDFGenerator:
                 temp_html = f.name
             
             try:
-                # Chrome headless command with PERFECT settings
+                # Chrome headless command with PERFECT settings (NO HEADERS/FOOTERS!)
                 cmd = [
                     chrome_exe,
                     '--headless',
@@ -543,6 +543,7 @@ class PDFGenerator:
                     '--no-margins',  # Use CSS margins instead
                     '--disable-smart-shrinking',  # CRITICAL!
                     '--run-all-compositor-stages-before-draw',
+                    '--no-pdf-header-footer',  # REMOVE TIMESTAMP AND FILE PATH
                     '--print-to-pdf=' + output_path,
                     temp_html
                 ]
@@ -570,7 +571,7 @@ class PDFGenerator:
         try:
             import pdfkit
             
-            # Configure options - ROCK SOLID ANTI-SHRINK SETTINGS
+            # Configure options - ROCK SOLID ANTI-SHRINK SETTINGS (NO HEADERS/FOOTERS!)
             options = {
                 'page-size': 'A4',
                 'orientation': self.orientation,
@@ -584,7 +585,9 @@ class PDFGenerator:
                 'disable-smart-shrinking': None,  # CRITICAL: Prevents table shrinking
                 'zoom': '1.0',  # CRITICAL: No scaling
                 'dpi': 96,  # CRITICAL: Standard DPI for perfect rendering
-                'image-quality': 100  # Maximum quality
+                'image-quality': 100,  # Maximum quality
+                'no-header-line': None,  # Remove header line
+                'no-footer-line': None  # Remove footer line
             }
             
             # Try to configure wkhtmltopdf path

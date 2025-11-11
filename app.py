@@ -46,7 +46,7 @@ def generate_pdf_from_html(html_path, pdf_path):
     
     if chrome_exe:
         try:
-            # CHROME HEADLESS - PERFECT PDF GENERATION (NO SHRINKING!)
+            # CHROME HEADLESS - PERFECT PDF GENERATION (NO SHRINKING, NO HEADERS/FOOTERS!)
             cmd = [
                 chrome_exe,
                 '--headless',
@@ -54,6 +54,7 @@ def generate_pdf_from_html(html_path, pdf_path):
                 '--no-margins',
                 '--disable-smart-shrinking',
                 '--run-all-compositor-stages-before-draw',
+                '--no-pdf-header-footer',  # REMOVE TIMESTAMP AND FILE PATH
                 '--print-to-pdf=' + str(os.path.abspath(pdf_path)),
                 'file:///' + str(os.path.abspath(html_path)).replace('\\', '/')
             ]
@@ -85,6 +86,8 @@ def generate_pdf_from_html(html_path, pdf_path):
             '--zoom', '1.0',
             '--dpi', '96',
             '--print-media-type',
+            '--no-header-line',  # Remove header line
+            '--no-footer-line',  # Remove footer line
             str(html_path),
             str(pdf_path)
         ]
@@ -333,11 +336,20 @@ def main():
         </style>
     """, unsafe_allow_html=True)
     
-    # Beautiful Header
+    # Beautiful Header with Credits
     st.markdown("""
         <div class="main-header">
-            <h1>📄 Professional Bill Generator</h1>
-            <p>🏗️ Generate contractor bills, deviation statements, and all required documents with zero shrinking PDFs</p>
+            <div style='display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;'>
+                <div style='flex: 1; min-width: 300px;'>
+                    <h1>📄 Professional Bill Generator</h1>
+                    <p>🏗️ Generate contractor bills, deviation statements, and all required documents with zero shrinking PDFs</p>
+                </div>
+                <div style='text-align: right; padding: 0.5rem; background: rgba(255,255,255,0.2); 
+                            border-radius: 8px; min-width: 200px;'>
+                    <p style='margin: 0; font-size: 0.85rem; color: #ecf0f1;'>Developed by</p>
+                    <p style='margin: 0; font-size: 1.1rem; font-weight: 700; color: white;'>Raj Kumar Singh</p>
+                </div>
+            </div>
         </div>
     """, unsafe_allow_html=True)
     
@@ -359,13 +371,17 @@ def main():
         help="Choose mode: Upload file, test with samples, or batch process all"
     )
     
-    # Add footer to sidebar
+    # Add footer to sidebar with credits
     st.sidebar.markdown("---")
     st.sidebar.markdown("""
-        <div style='text-align: center; color: #7f8c8d; font-size: 0.9rem;'>
-            <p><strong>Bill Generator Pro</strong></p>
-            <p>Powered by Chrome Headless</p>
-            <p>Version 2.0</p>
+        <div style='text-align: center; color: #7f8c8d; font-size: 0.85rem;'>
+            <p style='margin: 0.3rem 0;'><strong>Bill Generator Pro</strong></p>
+            <p style='margin: 0.3rem 0;'>Powered by Chrome Headless</p>
+            <p style='margin: 0.3rem 0;'>Version 2.0</p>
+            <hr style='margin: 0.8rem 0; border: none; border-top: 1px solid #bdc3c7;'>
+            <p style='margin: 0.3rem 0; font-size: 0.8rem;'><strong>👨‍💻 Developed By:</strong></p>
+            <p style='margin: 0.3rem 0; color: #2ecc71; font-weight: 600;'>Raj Kumar Singh</p>
+            <p style='margin: 0.3rem 0; font-size: 0.75rem;'>Infrastructure Bill Automation</p>
         </div>
     """, unsafe_allow_html=True)
     
@@ -749,7 +765,7 @@ def main():
         - CSV files (coming soon)
         """)
     
-    # Beautiful Footer
+    # Beautiful Footer with Credits
     st.markdown("---")
     st.markdown("""
         <div style='text-align: center; padding: 2rem; background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); 
@@ -761,8 +777,22 @@ def main():
             <p style='color: #95a5a6; font-size: 0.9rem; margin: 0.5rem 0;'>
                 ✨ Zero-Shrinking PDFs | 🚀 Chrome Headless Powered | 📦 Batch Processing
             </p>
-            <p style='color: #7f8c8d; font-size: 0.8rem; margin: 1rem 0 0 0;'>
+            <div style='margin: 1.5rem 0; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px;'>
+                <p style='color: #ecf0f1; font-size: 0.95rem; margin: 0.3rem 0;'>
+                    <strong>👨‍💻 Developed By</strong>
+                </p>
+                <p style='color: #2ecc71; font-size: 1.1rem; font-weight: 700; margin: 0.3rem 0;'>
+                    Raj Kumar Singh
+                </p>
+                <p style='color: #95a5a6; font-size: 0.85rem; margin: 0.3rem 0;'>
+                    Infrastructure Bill Automation Specialist
+                </p>
+            </div>
+            <p style='color: #7f8c8d; font-size: 0.8rem; margin: 0.5rem 0 0 0;'>
                 Version 2.0 | Made with ❤️ for Infrastructure Projects
+            </p>
+            <p style='color: #7f8c8d; font-size: 0.75rem; margin: 0.5rem 0 0 0;'>
+                © 2024 Bill Generator Pro | All Rights Reserved
             </p>
         </div>
     """, unsafe_allow_html=True)
