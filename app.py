@@ -444,7 +444,7 @@ def main():
         
         # Settings with better styling
         st.markdown("#### ⚙️ Configuration")
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         with col1:
             premium_percent = st.number_input(
                 "💰 Premium Percentage", 
@@ -462,6 +462,14 @@ def main():
                 horizontal=True,
                 help="Select whether premium is above or below the base amount"
             )
+        with col3:
+            last_bill_amount = st.number_input(
+                "💵 Last Bill Amount", 
+                value=0.0, 
+                min_value=0.0, 
+                step=1000.0,
+                help="Amount paid in last bill (0 for first bill)"
+            )
         
         # Process button
         if st.button("🚀 Process Selected File", type="primary", use_container_width=True):
@@ -475,7 +483,7 @@ def main():
                     
                     # Process bill
                     first_page_data, last_page_data, deviation_data, extra_items_data, note_sheet_data = process_bill(
-                        ws_wo, ws_bq, ws_extra, premium_percent, premium_type, 0
+                        ws_wo, ws_bq, ws_extra, premium_percent, premium_type, last_bill_amount
                     )
                     
                     # Create output directory
@@ -525,11 +533,14 @@ def main():
                         for file in html_files:
                             st.write(f"✅ {file}")
                     
-                    # Generate PDFs
+                    # Generate PDFs and Word documents
                     st.subheader("📥 Download Options")
                     
-                    with st.spinner("Generating PDFs..."):
+                    with st.spinner("Generating PDFs and Word documents..."):
                         pdf_files = []
+                        word_files = []
+                        
+                        # Generate PDFs
                         for html_file in html_files:
                             html_path = output_dir / html_file
                             pdf_file = html_file.replace('.html', '.pdf')
@@ -538,17 +549,48 @@ def main():
                             if generate_pdf_from_html(html_path, pdf_path):
                                 pdf_files.append(pdf_path)
                         
-                        if pdf_files:
-                            st.success(f"✅ Generated {len(pdf_files)} PDF files!")
+                        # Generate Word documents
+                        from exports.word_generator import generate_first_page_docx, generate_deviation_statement_docx, generate_extra_items_docx
+                        
+                        try:
+                            # First Page Word
+                            word_path = output_dir / "first_page.docx"
+                            generate_first_page_docx(first_page_data, str(word_path))
+                            if word_path.exists():
+                                word_files.append(word_path)
+                        except Exception as e:
+                            print(f"Word generation error: {e}")
+                        
+                        try:
+                            # Deviation Statement Word
+                            word_path = output_dir / "deviation_statement.docx"
+                            generate_deviation_statement_docx(deviation_data, str(word_path))
+                            if word_path.exists():
+                                word_files.append(word_path)
+                        except Exception as e:
+                            print(f"Word generation error: {e}")
+                        
+                        try:
+                            # Extra Items Word
+                            word_path = output_dir / "extra_items.docx"
+                            generate_extra_items_docx(extra_items_data, str(word_path))
+                            if word_path.exists():
+                                word_files.append(word_path)
+                        except Exception as e:
+                            print(f"Word generation error: {e}")
+                        
+                        if pdf_files or word_files:
+                            st.success(f"✅ Generated {len(pdf_files)} PDFs and {len(word_files)} Word documents!")
                             st.balloons()  # 🎈 Celebration!
                             
-                            # Create ZIP file
+                            # Create ZIP file with both PDFs and Word files
                             zip_filename = f"bill_documents_{timestamp}.zip"
                             zip_path = output_dir / zip_filename
-                            create_zip_file(pdf_files, zip_path)
+                            all_files = pdf_files + word_files
+                            create_zip_file(all_files, zip_path)
                             
                             # Download buttons
-                            col1, col2 = st.columns(2)
+                            col1, col2, col3 = st.columns(3)
                             
                             with col1:
                                 # Download individual PDFs
@@ -564,11 +606,24 @@ def main():
                                         )
                             
                             with col2:
+                                # Download Word files
+                                st.markdown("**📝 Word Documents:**")
+                                for word_file in word_files:
+                                    with open(word_file, 'rb') as f:
+                                        st.download_button(
+                                            label=f"⬇️ {word_file.name}",
+                                            data=f.read(),
+                                            file_name=word_file.name,
+                                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                            use_container_width=True
+                                        )
+                            
+                            with col3:
                                 # Download ZIP
                                 st.markdown("**📦 All Documents (ZIP):**")
                                 with open(zip_path, 'rb') as f:
                                     st.download_button(
-                                        label=f"⬇️ Download All PDFs (ZIP)",
+                                        label=f"⬇️ Download All (ZIP)",
                                         data=f.read(),
                                         file_name=zip_filename,
                                         mime="application/zip",
@@ -642,11 +697,13 @@ def main():
     if uploaded_file is not None:
         try:
             # Settings
-            col1, col2 = st.columns(2)
+            col1, col2, col3 = st.columns(3)
             with col1:
                 premium_percent = st.number_input("Premium %", value=5.0, min_value=0.0, max_value=100.0, step=0.1)
             with col2:
                 premium_type = st.radio("Premium Type", ["above", "below"], horizontal=True)
+            with col3:
+                last_bill_amount = st.number_input("Last Bill Amount", value=0.0, min_value=0.0, step=1000.0)
             
             # Process button
             if st.button("🚀 Generate Bill Documents", type="primary", use_container_width=True):
@@ -660,7 +717,7 @@ def main():
                         
                         # Process bill
                         first_page_data, last_page_data, deviation_data, extra_items_data, note_sheet_data = process_bill(
-                            ws_wo, ws_bq, ws_extra, premium_percent, premium_type, 0
+                            ws_wo, ws_bq, ws_extra, premium_percent, premium_type, last_bill_amount
                         )
                         
                         # Create output directory
@@ -705,11 +762,14 @@ def main():
                         with col2:
                             st.metric("Percentage Deviation", f"{summary['percentage_deviation']:.2f}%")
                         
-                        # Generate PDFs
+                        # Generate PDFs and Word documents
                         st.subheader("📥 Download Options")
                         
-                        with st.spinner("Generating PDFs..."):
+                        with st.spinner("Generating PDFs and Word documents..."):
                             pdf_files = []
+                            word_files = []
+                            
+                            # Generate PDFs
                             for html_file in html_files:
                                 html_path = output_dir / html_file
                                 pdf_file = html_file.replace('.html', '.pdf')
@@ -718,17 +778,42 @@ def main():
                                 if generate_pdf_from_html(html_path, pdf_path):
                                     pdf_files.append(pdf_path)
                             
-                            if pdf_files:
-                                st.success(f"✅ Generated {len(pdf_files)} PDF files!")
+                            # Generate Word documents
+                            from exports.word_generator import generate_first_page_docx, generate_deviation_statement_docx, generate_extra_items_docx
+                            
+                            try:
+                                word_path = output_dir / "first_page.docx"
+                                generate_first_page_docx(first_page_data, str(word_path))
+                                if word_path.exists():
+                                    word_files.append(word_path)
+                            except: pass
+                            
+                            try:
+                                word_path = output_dir / "deviation_statement.docx"
+                                generate_deviation_statement_docx(deviation_data, str(word_path))
+                                if word_path.exists():
+                                    word_files.append(word_path)
+                            except: pass
+                            
+                            try:
+                                word_path = output_dir / "extra_items.docx"
+                                generate_extra_items_docx(extra_items_data, str(word_path))
+                                if word_path.exists():
+                                    word_files.append(word_path)
+                            except: pass
+                            
+                            if pdf_files or word_files:
+                                st.success(f"✅ Generated {len(pdf_files)} PDFs and {len(word_files)} Word documents!")
                                 st.balloons()  # 🎈 Celebration!
                                 
                                 # Create ZIP file
                                 zip_filename = f"bill_documents_{safe_name}_{timestamp}.zip"
                                 zip_path = output_dir / zip_filename
-                                create_zip_file(pdf_files, zip_path)
+                                all_files = pdf_files + word_files
+                                create_zip_file(all_files, zip_path)
                                 
                                 # Download buttons
-                                col1, col2 = st.columns(2)
+                                col1, col2, col3 = st.columns(3)
                                 
                                 with col1:
                                     # Download individual PDFs
@@ -744,11 +829,24 @@ def main():
                                             )
                                 
                                 with col2:
+                                    # Download Word files
+                                    st.markdown("**📝 Word Documents:**")
+                                    for word_file in word_files:
+                                        with open(word_file, 'rb') as f:
+                                            st.download_button(
+                                                label=f"⬇️ {word_file.name}",
+                                                data=f.read(),
+                                                file_name=word_file.name,
+                                                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                                use_container_width=True
+                                            )
+                                
+                                with col3:
                                     # Download ZIP
                                     st.markdown("**📦 All Documents (ZIP):**")
                                     with open(zip_path, 'rb') as f:
                                         st.download_button(
-                                            label=f"⬇️ Download All PDFs (ZIP)",
+                                            label=f"⬇️ Download All (ZIP)",
                                             data=f.read(),
                                             file_name=zip_filename,
                                             mime="application/zip",
