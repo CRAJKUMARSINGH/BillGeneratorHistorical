@@ -57,9 +57,17 @@ def generate_first_page_docx(data, output_path):
     # Main table
     items = data.get('items', [])
     if items:
-        # Create table with 9 columns
+        # Create table with 9 columns - FIXED WIDTHS (NO SHRINKING!)
         table = doc.add_table(rows=1, cols=9)
         table.style = 'Table Grid'
+        table.autofit = False
+        table.allow_autofit = False
+        
+        # Set exact column widths (matching HTML template)
+        widths = [Mm(25), Mm(20), Mm(20), Mm(15), Mm(70), Mm(20), Mm(25), Mm(25), Mm(15)]
+        for row in table.rows:
+            for idx, width in enumerate(widths):
+                row.cells[idx].width = width
         
         # Header row
         header_cells = table.rows[0].cells
@@ -70,16 +78,21 @@ def generate_first_page_docx(data, output_path):
             header_cells[i].text = header
             header_cells[i].paragraphs[0].runs[0].font.bold = True
             header_cells[i].paragraphs[0].runs[0].font.size = Pt(8)
+            header_cells[i].width = widths[i]
         
         # Data rows
         for item in items:
             if item.get('is_divider'):
                 row = table.add_row()
+                for idx, width in enumerate(widths):
+                    row.cells[idx].width = width
                 row.cells[0].merge(row.cells[8])
                 row.cells[0].text = item.get('description', '')
                 row.cells[0].paragraphs[0].runs[0].font.bold = True
             else:
                 row = table.add_row()
+                for idx, width in enumerate(widths):
+                    row.cells[idx].width = width
                 row.cells[0].text = str(item.get('unit', ''))
                 row.cells[1].text = str(item.get('quantity_since_last', ''))
                 row.cells[2].text = str(item.get('quantity_upto_date', ''))
@@ -95,6 +108,8 @@ def generate_first_page_docx(data, output_path):
         
         # Grand Total
         row = table.add_row()
+        for idx, width in enumerate(widths):
+            row.cells[idx].width = width
         row.cells[0].merge(row.cells[3])
         row.cells[0].text = 'Grand Total Rs.'
         row.cells[6].text = str(totals.get('grand_total', ''))
@@ -103,20 +118,29 @@ def generate_first_page_docx(data, output_path):
         # Premium
         premium = totals.get('premium', {})
         row = table.add_row()
+        for idx, width in enumerate(widths):
+            row.cells[idx].width = width
         row.cells[0].merge(row.cells[3])
         row.cells[0].text = f"Tender Premium @ {premium.get('percent', 0)*100:.2f}%"
         row.cells[6].text = str(premium.get('amount', ''))
         row.cells[7].text = str(premium.get('amount', ''))
         
-        # Extra Items Sum
+        # Extra Items Sum - MERGED ALL COLUMNS, LEFT ALIGNED
         row = table.add_row()
-        row.cells[0].merge(row.cells[3])
+        for idx, width in enumerate(widths):
+            row.cells[idx].width = width
+        row.cells[0].merge(row.cells[8])
         extra_sum = totals.get('extra_items_sum', 0)
-        row.cells[0].text = str(extra_sum if extra_sum > 0 else 'NIL')
-        row.cells[4].text = 'Sum of Extra Items (including Tender Premium) Rs.'
+        if extra_sum and extra_sum > 0:
+            row.cells[0].text = f'Sum of Extra Items (including Tender Premium): Rs. {extra_sum}'
+        else:
+            row.cells[0].text = 'Sum of Extra Items (including Tender Premium): NIL'
+        row.cells[0].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
         
         # Payable Amount
         row = table.add_row()
+        for idx, width in enumerate(widths):
+            row.cells[idx].width = width
         row.cells[0].merge(row.cells[3])
         row.cells[0].text = 'Payable Amount Rs.'
         row.cells[6].text = str(totals.get('payable', ''))
@@ -124,6 +148,8 @@ def generate_first_page_docx(data, output_path):
         
         # Less Amount Paid
         row = table.add_row()
+        for idx, width in enumerate(widths):
+            row.cells[idx].width = width
         row.cells[0].merge(row.cells[3])
         row.cells[0].text = 'Less Amount Paid vide Last Bill Rs.'
         last_bill = totals.get('last_bill_amount', 0)
@@ -132,6 +158,8 @@ def generate_first_page_docx(data, output_path):
         
         # Net Payable
         row = table.add_row()
+        for idx, width in enumerate(widths):
+            row.cells[idx].width = width
         row.cells[0].merge(row.cells[3])
         row.cells[0].text = 'Net Payable Amount Rs.'
         row.cells[0].paragraphs[0].runs[0].font.bold = True
