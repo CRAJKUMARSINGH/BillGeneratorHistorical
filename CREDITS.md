@@ -83,6 +83,11 @@
 
 ## 🙏 Special Thanks
 
+**Prepared on Initiative of:**
+- **Mrs. Premlata Jain, AAO, PWD Udaipur** - For initiating this project and providing valuable guidance
+
+**Technical Contributions:**
+- **Raj Kumar Singh** - Development and implementation
 - **Streamlit Team** - For the amazing framework
 - **Chrome Team** - For headless PDF capabilities
 - **Open Source Community** - For excellent libraries

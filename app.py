@@ -184,6 +184,7 @@ def process_batch_files(excel_files):
     status_text.empty()
     
     st.success(f"✅ Batch processing complete! Processed {len(excel_files)} files")
+    st.balloons()  # 🎈 Celebration!
     
     # Results table
     success_count = sum(1 for r in results if r['status'] == 'SUCCESS')
@@ -227,6 +228,7 @@ def process_batch_files(excel_files):
             
             if all_pdf_files:
                 st.success(f"✅ Generated {len(all_pdf_files)} PDF files across all batches!")
+                st.balloons()  # 🎈 Celebration!
                 
                 # Create master ZIP
                 master_zip_filename = f"batch_all_bills_{timestamp}.zip"
@@ -339,16 +341,12 @@ def main():
     # Beautiful Header with Credits
     st.markdown("""
         <div class="main-header">
-            <div style='display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;'>
-                <div style='flex: 1; min-width: 300px;'>
-                    <h1>📄 Professional Bill Generator</h1>
-                    <p>🏗️ Generate contractor bills, deviation statements, and all required documents with zero shrinking PDFs</p>
-                </div>
-                <div style='text-align: right; padding: 0.5rem; background: rgba(255,255,255,0.2); 
-                            border-radius: 8px; min-width: 200px;'>
-                    <p style='margin: 0; font-size: 0.85rem; color: #ecf0f1;'>Developed by</p>
-                    <p style='margin: 0; font-size: 1.1rem; font-weight: 700; color: white;'>Raj Kumar Singh</p>
-                </div>
+            <h1>📄 Professional Bill Generator</h1>
+            <p>🏗️ Generate contractor bills, deviation statements, and all required documents with zero shrinking PDFs</p>
+            <div style='text-align: center; margin-top: 1rem; padding: 0.8rem; background: rgba(255,255,255,0.15); 
+                        border-radius: 8px;'>
+                <p style='margin: 0; font-size: 0.85rem; color: #ecf0f1;'>Prepared on Initiative of</p>
+                <p style='margin: 0.3rem 0; font-size: 1.1rem; font-weight: 700; color: white;'>Mrs. Premlata Jain, AAO, PWD Udaipur</p>
             </div>
         </div>
     """, unsafe_allow_html=True)
@@ -379,9 +377,9 @@ def main():
             <p style='margin: 0.3rem 0;'>Powered by Chrome Headless</p>
             <p style='margin: 0.3rem 0;'>Version 2.0</p>
             <hr style='margin: 0.8rem 0; border: none; border-top: 1px solid #bdc3c7;'>
-            <p style='margin: 0.3rem 0; font-size: 0.8rem;'><strong>👨‍💻 Developed By:</strong></p>
-            <p style='margin: 0.3rem 0; color: #2ecc71; font-weight: 600;'>Raj Kumar Singh</p>
-            <p style='margin: 0.3rem 0; font-size: 0.75rem;'>Infrastructure Bill Automation</p>
+            <p style='margin: 0.3rem 0; font-size: 0.75rem;'><strong>🌟 Prepared on Initiative of:</strong></p>
+            <p style='margin: 0.3rem 0; color: #f39c12; font-weight: 600; font-size: 0.85rem;'>Mrs. Premlata Jain, AAO</p>
+            <p style='margin: 0.3rem 0; font-size: 0.75rem;'>PWD Udaipur</p>
         </div>
     """, unsafe_allow_html=True)
     
@@ -528,6 +526,7 @@ def main():
                         
                         if pdf_files:
                             st.success(f"✅ Generated {len(pdf_files)} PDF files!")
+                            st.balloons()  # 🎈 Celebration!
                             
                             # Create ZIP file
                             zip_filename = f"bill_documents_{timestamp}.zip"
@@ -707,6 +706,7 @@ def main():
                             
                             if pdf_files:
                                 st.success(f"✅ Generated {len(pdf_files)} PDF files!")
+                                st.balloons()  # 🎈 Celebration!
                                 
                                 # Create ZIP file
                                 zip_filename = f"bill_documents_{safe_name}_{timestamp}.zip"
@@ -778,14 +778,14 @@ def main():
                 ✨ Zero-Shrinking PDFs | 🚀 Chrome Headless Powered | 📦 Batch Processing
             </p>
             <div style='margin: 1.5rem 0; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px;'>
-                <p style='color: #ecf0f1; font-size: 0.95rem; margin: 0.3rem 0;'>
-                    <strong>👨‍💻 Developed By</strong>
+                <p style='color: #ecf0f1; font-size: 1rem; margin: 0.3rem 0;'>
+                    <strong>🌟 Prepared on Initiative of</strong>
                 </p>
-                <p style='color: #2ecc71; font-size: 1.1rem; font-weight: 700; margin: 0.3rem 0;'>
-                    Raj Kumar Singh
+                <p style='color: #f39c12; font-size: 1.2rem; font-weight: 700; margin: 0.5rem 0;'>
+                    Mrs. Premlata Jain, AAO
                 </p>
-                <p style='color: #95a5a6; font-size: 0.85rem; margin: 0.3rem 0;'>
-                    Infrastructure Bill Automation Specialist
+                <p style='color: #bdc3c7; font-size: 0.95rem; margin: 0.3rem 0;'>
+                    PWD Udaipur
                 </p>
             </div>
             <p style='color: #7f8c8d; font-size: 0.8rem; margin: 0.5rem 0 0 0;'>
