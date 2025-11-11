@@ -16,16 +16,22 @@
             print-color-adjust: exact !important;
         }
         html {
-            zoom: 1.0;
-            -webkit-text-size-adjust: none;
+            zoom: 1.0 !important;
+            -webkit-text-size-adjust: none !important;
+            -moz-text-size-adjust: none !important;
+            -ms-text-size-adjust: none !important;
+            text-size-adjust: none !important;
         }
         body { 
             font-family: Calibri, sans-serif; 
             font-size: 8pt; 
             margin: 0; 
             line-height: 1.2;
-            width: 190mm;
-            max-width: 190mm;
+            width: 190mm !important;
+            max-width: 190mm !important;
+            min-width: 190mm !important;
+            transform: scale(1.0) !important;
+            transform-origin: top left !important;
         }
         .container { 
             width: 190mm; 
@@ -35,13 +41,19 @@
             padding: 0; 
         }
         table { 
-            width: 190mm !important; 
-            max-width: 190mm !important;
-            min-width: 190mm !important;
+            width: 100% !important; 
             border-collapse: collapse; 
             table-layout: fixed !important; 
             font-size: 8pt;
         }
+        /* FORCE exact column widths - NO SHRINKING POSSIBLE */
+        table th:nth-child(1), table td:nth-child(1) { width: 25mm !important; min-width: 25mm !important; max-width: 25mm !important; }
+        table th:nth-child(2), table td:nth-child(2) { width: 70mm !important; min-width: 70mm !important; max-width: 70mm !important; }
+        table th:nth-child(3), table td:nth-child(3) { width: 15mm !important; min-width: 15mm !important; max-width: 15mm !important; }
+        table th:nth-child(4), table td:nth-child(4) { width: 20mm !important; min-width: 20mm !important; max-width: 20mm !important; }
+        table th:nth-child(5), table td:nth-child(5) { width: 20mm !important; min-width: 20mm !important; max-width: 20mm !important; }
+        table th:nth-child(6), table td:nth-child(6) { width: 25mm !important; min-width: 25mm !important; max-width: 25mm !important; }
+        table th:nth-child(7), table td:nth-child(7) { width: 15mm !important; min-width: 15mm !important; max-width: 15mm !important; }
         th, td { 
             border: 1px solid black; 
             padding: 3px 2px; 

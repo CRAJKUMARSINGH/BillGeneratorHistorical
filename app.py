@@ -21,9 +21,55 @@ from core.computations.bill_processor import process_bill
 from exports.renderers import generate_html
 
 def generate_pdf_from_html(html_path, pdf_path):
-    """Generate PDF from HTML using wkhtmltopdf"""
+    """Generate PDF from HTML using Chrome Headless (NO SHRINKING!)"""
+    import shutil
+    
+    # Try Chrome first (BEST - No shrinking!)
+    chrome_paths = [
+        'chromium',              # Streamlit Cloud (Linux)
+        'chromium-browser',      # Ubuntu/Debian
+        'google-chrome',         # Google Chrome on Linux
+        'chrome',                # Generic
+        '/usr/bin/chromium',     # Streamlit Cloud path
+        '/usr/bin/chromium-browser',
+        '/usr/bin/google-chrome',
+        r"C:\Program Files\Google\Chrome\Application\chrome.exe",  # Windows
+        r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+    ]
+    
+    chrome_exe = None
+    for path in chrome_paths:
+        found = shutil.which(path) if not os.path.isabs(path) else path
+        if found and os.path.exists(found):
+            chrome_exe = found
+            break
+    
+    if chrome_exe:
+        try:
+            # CHROME HEADLESS - PERFECT PDF GENERATION (NO SHRINKING!)
+            cmd = [
+                chrome_exe,
+                '--headless',
+                '--disable-gpu',
+                '--no-margins',
+                '--disable-smart-shrinking',
+                '--run-all-compositor-stages-before-draw',
+                '--print-to-pdf=' + str(os.path.abspath(pdf_path)),
+                'file:///' + str(os.path.abspath(html_path)).replace('\\', '/')
+            ]
+            
+            result = subprocess.run(cmd, capture_output=True, timeout=60)
+            
+            if result.returncode == 0 and os.path.exists(pdf_path):
+                print(f"✅ PDF generated with Chrome: {pdf_path}")
+                return True
+            else:
+                print(f"Chrome error: {result.stderr.decode() if result.stderr else 'Unknown'}")
+        except Exception as e:
+            print(f"Chrome exception: {str(e)}")
+    
+    # Fallback to wkhtmltopdf
     try:
-        # Determine orientation
         orientation = "Landscape" if "deviation" in str(html_path) else "Portrait"
         
         cmd = [
@@ -38,13 +84,22 @@ def generate_pdf_from_html(html_path, pdf_path):
             '--disable-smart-shrinking',
             '--zoom', '1.0',
             '--dpi', '96',
+            '--print-media-type',
             str(html_path),
             str(pdf_path)
         ]
         
-        result = subprocess.run(cmd, capture_output=True, timeout=30)
-        return result.returncode == 0 and os.path.exists(pdf_path)
-    except:
+        result = subprocess.run(cmd, capture_output=True, timeout=60)
+        
+        if result.returncode == 0 and os.path.exists(pdf_path):
+            print(f"✅ PDF generated with wkhtmltopdf: {pdf_path}")
+            return True
+        else:
+            print(f"wkhtmltopdf error: {result.stderr.decode() if result.stderr else 'Unknown'}")
+            return False
+            
+    except Exception as e:
+        print(f"PDF generation failed: {str(e)}")
         return False
 
 def create_zip_file(files, zip_path):

@@ -35,13 +35,23 @@
             padding: 0; 
         }
         table { 
-            width: 277mm !important; 
-            max-width: 277mm !important;
-            min-width: 277mm !important;
+            width: 100% !important; 
             border-collapse: collapse; 
             table-layout: fixed !important; 
             font-size: 8pt;
         }
+        /* FORCE exact column widths for deviation statement - NO SHRINKING */
+        table th:nth-child(1), table td:nth-child(1) { width: 20mm !important; min-width: 20mm !important; max-width: 20mm !important; }
+        table th:nth-child(2), table td:nth-child(2) { width: 60mm !important; min-width: 60mm !important; max-width: 60mm !important; }
+        table th:nth-child(3), table td:nth-child(3) { width: 15mm !important; min-width: 15mm !important; max-width: 15mm !important; }
+        table th:nth-child(4), table td:nth-child(4) { width: 20mm !important; min-width: 20mm !important; max-width: 20mm !important; }
+        table th:nth-child(5), table td:nth-child(5) { width: 20mm !important; min-width: 20mm !important; max-width: 20mm !important; }
+        table th:nth-child(6), table td:nth-child(6) { width: 20mm !important; min-width: 20mm !important; max-width: 20mm !important; }
+        table th:nth-child(7), table td:nth-child(7) { width: 20mm !important; min-width: 20mm !important; max-width: 20mm !important; }
+        table th:nth-child(8), table td:nth-child(8) { width: 25mm !important; min-width: 25mm !important; max-width: 25mm !important; }
+        table th:nth-child(9), table td:nth-child(9) { width: 25mm !important; min-width: 25mm !important; max-width: 25mm !important; }
+        table th:nth-child(10), table td:nth-child(10) { width: 25mm !important; min-width: 25mm !important; max-width: 25mm !important; }
+        table th:nth-child(11), table td:nth-child(11) { width: 27mm !important; min-width: 27mm !important; max-width: 27mm !important; }
         th, td { 
             border: 1px solid black; 
             padding: 3px 2px; 
