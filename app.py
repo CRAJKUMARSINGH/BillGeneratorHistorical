@@ -253,23 +253,132 @@ def main():
     st.set_page_config(
         page_title="Bill Generator Pro",
         page_icon="📄",
-        layout="wide"
+        layout="wide",
+        initial_sidebar_state="expanded"
     )
     
-    st.title("📄 Professional Bill Generator")
-    st.markdown("Generate contractor bills, deviation statements, and all required documents")
+    # Custom CSS for beautiful green header
+    st.markdown("""
+        <style>
+        /* Green Header Styling */
+        .main-header {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .main-header h1 {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .main-header p {
+            color: #ecf0f1;
+            font-size: 1.1rem;
+            margin: 0.5rem 0 0 0;
+        }
+        
+        /* Sidebar Styling */
+        [data-testid="stSidebar"] {
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        /* Button Styling */
+        .stButton>button {
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .stButton>button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Download Button Styling */
+        .stDownloadButton>button {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        /* Metric Cards */
+        [data-testid="stMetricValue"] {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2ecc71;
+        }
+        
+        /* Success Messages */
+        .element-container div[data-testid="stMarkdownContainer"] > div[data-testid="stMarkdown"] {
+            border-radius: 8px;
+        }
+        
+        /* File Uploader */
+        [data-testid="stFileUploader"] {
+            border: 2px dashed #2ecc71;
+            border-radius: 10px;
+            padding: 1rem;
+            background: #f8f9fa;
+        }
+        
+        /* Progress Bar */
+        .stProgress > div > div > div {
+            background: linear-gradient(90deg, #2ecc71 0%, #27ae60 100%);
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
+    # Beautiful Header
+    st.markdown("""
+        <div class="main-header">
+            <h1>📄 Professional Bill Generator</h1>
+            <p>🏗️ Generate contractor bills, deviation statements, and all required documents with zero shrinking PDFs</p>
+        </div>
+    """, unsafe_allow_html=True)
     
     # Sidebar for mode selection
-    st.sidebar.title("⚙️ Options")
+    st.sidebar.markdown("### ⚙️ Processing Options")
+    
+    # Info box in sidebar
+    st.sidebar.info("""
+    **✨ Features:**
+    - 📄 Zero-shrinking PDFs
+    - 🎨 Professional formatting
+    - 📦 Batch processing
+    - ⬇️ Instant downloads
+    """)
+    
     mode = st.sidebar.radio(
-        "Select Mode",
+        "Select Processing Mode",
         ["Single File Upload", "Test Run (Sample Files)", "Batch Process All Files"],
         help="Choose mode: Upload file, test with samples, or batch process all"
     )
     
+    # Add footer to sidebar
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("""
+        <div style='text-align: center; color: #7f8c8d; font-size: 0.9rem;'>
+            <p><strong>Bill Generator Pro</strong></p>
+            <p>Powered by Chrome Headless</p>
+            <p>Version 2.0</p>
+        </div>
+    """, unsafe_allow_html=True)
+    
     if mode == "Test Run (Sample Files)":
-        st.header("🧪 Test Run with Sample Files")
-        st.markdown("Test the system using sample files from `test_input_files` folder")
+        st.markdown("""
+            <div style='background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); 
+                        padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;'>
+                <h2 style='color: white; margin: 0;'>🧪 Test Run with Sample Files</h2>
+                <p style='color: #ecf0f1; margin: 0.5rem 0 0 0;'>
+                    Test the system using pre-loaded sample files - Perfect for trying out the app!
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
         
         # Check if test_input_files exists
         test_input_dir = Path("test_input_files")
@@ -284,21 +393,47 @@ def main():
             st.warning("⚠️ No Excel files found in test_input_files folder")
             return
         
-        st.success(f"✅ Found {len(excel_files)} sample files")
+        # Show available files in a nice card
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.markdown(f"""
+                <div style='background: #d5f4e6; padding: 1rem; border-radius: 8px; 
+                            border-left: 4px solid #2ecc71; margin: 1rem 0;'>
+                    <p style='margin: 0; color: #27ae60; font-weight: 600;'>
+                        ✅ Found {len(excel_files)} sample files ready for testing
+                    </p>
+                </div>
+            """, unsafe_allow_html=True)
         
-        # File selector
+        # File selector with better styling
+        st.markdown("#### 📁 Select a Sample File")
         selected_file = st.selectbox(
-            "Select a sample file to test",
+            "Choose file to process:",
             excel_files,
-            format_func=lambda x: x.name
+            format_func=lambda x: x.name,
+            label_visibility="collapsed"
         )
         
-        # Settings
+        # Settings with better styling
+        st.markdown("#### ⚙️ Configuration")
         col1, col2 = st.columns(2)
         with col1:
-            premium_percent = st.number_input("Premium %", value=5.0, min_value=0.0, max_value=100.0, step=0.1)
+            premium_percent = st.number_input(
+                "💰 Premium Percentage", 
+                value=5.0, 
+                min_value=0.0, 
+                max_value=100.0, 
+                step=0.1,
+                help="Enter the premium percentage to apply"
+            )
         with col2:
-            premium_type = st.radio("Premium Type", ["above", "below"], horizontal=True)
+            st.markdown("<br>", unsafe_allow_html=True)
+            premium_type = st.radio(
+                "📊 Premium Type", 
+                ["above", "below"], 
+                horizontal=True,
+                help="Select whether premium is above or below the base amount"
+            )
         
         # Process button
         if st.button("🚀 Process Selected File", type="primary", use_container_width=True):
@@ -423,8 +558,15 @@ def main():
         return
     
     if mode == "Batch Process All Files":
-        st.header("🔄 Batch Process All Files")
-        st.markdown("Process all Excel files from `test_input_files` folder and generate HTML outputs")
+        st.markdown("""
+            <div style='background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); 
+                        padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;'>
+                <h2 style='color: white; margin: 0;'>🔄 Batch Process All Files</h2>
+                <p style='color: #ecf0f1; margin: 0.5rem 0 0 0;'>
+                    Process multiple Excel files at once and download all results in a single ZIP
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
         
         # Check if test_input_files exists
         test_input_dir = Path("test_input_files")
@@ -451,7 +593,15 @@ def main():
         return
     
     # Single File Upload Mode
-    st.header("📤 Upload Your Excel File")
+    st.markdown("""
+        <div style='background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); 
+                    padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;'>
+            <h2 style='color: white; margin: 0;'>📤 Upload Your Excel File</h2>
+            <p style='color: #ecf0f1; margin: 0.5rem 0 0 0;'>
+                Upload your own bill data and generate professional documents instantly
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
     
     # File upload
     uploaded_file = st.file_uploader(
@@ -599,9 +749,23 @@ def main():
         - CSV files (coming soon)
         """)
     
-    # Footer
+    # Beautiful Footer
     st.markdown("---")
-    st.markdown("*Stream-Bill-App_Main - Professional Bill Generation System*")
+    st.markdown("""
+        <div style='text-align: center; padding: 2rem; background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); 
+                    border-radius: 10px; margin-top: 3rem;'>
+            <h3 style='color: white; margin: 0;'>📄 Bill Generator Pro</h3>
+            <p style='color: #bdc3c7; margin: 0.5rem 0;'>
+                Professional Infrastructure Bill Generation System
+            </p>
+            <p style='color: #95a5a6; font-size: 0.9rem; margin: 0.5rem 0;'>
+                ✨ Zero-Shrinking PDFs | 🚀 Chrome Headless Powered | 📦 Batch Processing
+            </p>
+            <p style='color: #7f8c8d; font-size: 0.8rem; margin: 1rem 0 0 0;'>
+                Version 2.0 | Made with ❤️ for Infrastructure Projects
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
