@@ -1,3 +1,46 @@
+# Stream Bill Generator
+
+A professional infrastructure bill generation system built with Streamlit.
+
+## Features
+
+- Generate contractor bills from Excel data
+- Create deviation statements
+- Generate statutory documents
+- Export to PDF and Word formats
+- Automatic calculations with premium adjustments
+
+## Requirements
+
+- Python 3.8+
+- See `requirements.txt` for Python dependencies
+- See `packages.txt` for system dependencies
+
+## Installation
+
+```bash
+pip install -r requirements.txt
+```
+
+## Usage
+
+```bash
+streamlit run app/main.py
+```
+
+## Deployment
+
+This app is optimized for Streamlit Cloud deployment. Simply point to `app/main.py` as the main file.
+
+## Required Excel Format
+
+The app requires an Excel file with three sheets:
+1. Work Order
+2. Bill Quantity
+3. Extra Items
+
+Each sheet should follow the standard format with headers in row 20.
+
 # Stream Bill App
 
 A comprehensive bill generation application built with Streamlit for PWD (Public Works Department) billing processes.

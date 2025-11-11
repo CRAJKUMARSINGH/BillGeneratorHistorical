@@ -33,10 +33,10 @@ class PDFGenerator:
     A4_HEIGHT_MM = 297
     
     # Margin specifications (in mm)
-    MARGIN_TOP = 12
-    MARGIN_RIGHT = 12
-    MARGIN_BOTTOM = 12
-    MARGIN_LEFT = 12
+    MARGIN_TOP = 10
+    MARGIN_RIGHT = 10
+    MARGIN_BOTTOM = 10
+    MARGIN_LEFT = 10
     
     def __init__(self, 
                  orientation: Literal['portrait', 'landscape'] = 'portrait',
@@ -81,6 +81,29 @@ class PDFGenerator:
         """Detect available PDF generation engines"""
         engines = []
         
+        # Check for Chrome/Chromium (BEST - No shrinking!)
+        import subprocess
+        import shutil
+        chrome_paths = [
+            shutil.which('google-chrome'),
+            shutil.which('chrome'),
+            shutil.which('chromium'),
+            shutil.which('chromium-browser'),
+            r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+            r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+        ]
+        for chrome_path in chrome_paths:
+            if chrome_path and os.path.exists(chrome_path):
+                engines.append('chrome')
+                break
+        
+        # Check for pdfkit/wkhtmltopdf
+        try:
+            import pdfkit
+            engines.append('pdfkit')
+        except ImportError:
+            pass
+        
         # Check for WeasyPrint
         try:
             import weasyprint
@@ -99,13 +122,6 @@ class PDFGenerator:
         try:
             from xhtml2pdf import pisa
             engines.append('xhtml2pdf')
-        except ImportError:
-            pass
-        
-        # Check for pdfkit
-        try:
-            import pdfkit
-            engines.append('pdfkit')
         except ImportError:
             pass
         
@@ -486,12 +502,75 @@ class PDFGenerator:
             logger.error(f"xhtml2pdf generation failed: {e}")
             return False
     
+    def html_to_pdf_chrome(self, html_content: str, output_path: str) -> bool:
+        """Generate PDF using Chrome Headless (BEST - No shrinking!)"""
+        try:
+            import subprocess
+            import tempfile
+            import shutil
+            
+            # Find Chrome executable
+            chrome_paths = [
+                shutil.which('google-chrome'),
+                shutil.which('chrome'),
+                shutil.which('chromium'),
+                shutil.which('chromium-browser'),
+                r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+            ]
+            
+            chrome_exe = None
+            for path in chrome_paths:
+                if path and os.path.exists(path):
+                    chrome_exe = path
+                    break
+            
+            if not chrome_exe:
+                logger.error("Chrome executable not found")
+                return False
+            
+            # Create temporary HTML file
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False, encoding='utf-8') as f:
+                f.write(html_content)
+                temp_html = f.name
+            
+            try:
+                # Chrome headless command with PERFECT settings
+                cmd = [
+                    chrome_exe,
+                    '--headless',
+                    '--disable-gpu',
+                    '--no-margins',  # Use CSS margins instead
+                    '--disable-smart-shrinking',  # CRITICAL!
+                    '--run-all-compositor-stages-before-draw',
+                    '--print-to-pdf=' + output_path,
+                    temp_html
+                ]
+                
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+                
+                if result.returncode == 0 and os.path.exists(output_path):
+                    logger.info(f"PDF generated successfully using Chrome: {output_path}")
+                    return True
+                else:
+                    logger.error(f"Chrome PDF generation failed: {result.stderr}")
+                    return False
+                    
+            finally:
+                # Clean up temp file
+                if os.path.exists(temp_html):
+                    os.unlink(temp_html)
+                    
+        except Exception as e:
+            logger.error(f"Chrome PDF generation failed: {e}")
+            return False
+    
     def html_to_pdf_pdfkit(self, html_content: str, output_path: str) -> bool:
         """Generate PDF using pdfkit (basic but reliable)"""
         try:
             import pdfkit
             
-            # Configure options
+            # Configure options - ROCK SOLID ANTI-SHRINK SETTINGS
             options = {
                 'page-size': 'A4',
                 'orientation': self.orientation,
@@ -501,7 +580,11 @@ class PDFGenerator:
                 'margin-left': f'{self.margin_left}mm',
                 'encoding': "UTF-8",
                 'no-outline': None,
-                'enable-local-file-access': None
+                'enable-local-file-access': None,
+                'disable-smart-shrinking': None,  # CRITICAL: Prevents table shrinking
+                'zoom': '1.0',  # CRITICAL: No scaling
+                'dpi': 96,  # CRITICAL: Standard DPI for perfect rendering
+                'image-quality': 100  # Maximum quality
             }
             
             # Try to configure wkhtmltopdf path
@@ -549,14 +632,16 @@ class PDFGenerator:
             raise Exception(f"PDF engine {engine} not available")
         
         # Generate PDF using selected engine
-        if engine == "weasyprint":
+        if engine == "chrome":
+            return self.html_to_pdf_chrome(html_content, output_path)
+        elif engine == "pdfkit":
+            return self.html_to_pdf_pdfkit(html_content, output_path)
+        elif engine == "weasyprint":
             return self.html_to_pdf_weasyprint(html_content, output_path)
         elif engine == "reportlab":
             return self.html_to_pdf_reportlab(html_content, output_path)
         elif engine == "xhtml2pdf":
             return self.html_to_pdf_xhtml2pdf(html_content, output_path)
-        elif engine == "pdfkit":
-            return self.html_to_pdf_pdfkit(html_content, output_path)
         else:
             raise Exception(f"Unsupported PDF engine: {engine}")
     

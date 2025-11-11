@@ -238,6 +238,22 @@ def process_bill(ws_wo, ws_bq, ws_extra, premium_percent, premium_type):
     # Deviation summary
     tender_premium_f = round(work_order_total * (premium_percent / 100) if premium_type == "above" else -work_order_total * (premium_percent / 100))
     tender_premium_h = round(executed_total * (premium_percent / 100) if premium_type == "above" else -executed_total * (premium_percent / 100))
+    tender_premium_j = round(overall_excess * (premium_percent / 100) if premium_type == "above" else -overall_excess * (premium_percent / 100))
+    tender_premium_l = round(overall_saving * (premium_percent / 100) if premium_type == "above" else -overall_saving * (premium_percent / 100))
+    grand_total_f = round(work_order_total + tender_premium_f)
+    grand_total_h = round(executed_total + tender_premium_h)
+    grand_total_j = round(overall_excess + tender_premium_j)
+    grand_total_l = round(overall_saving + tender_premium_l)
+    net_difference = round(grand_total_h - grand_total_f)
+    
+    # Calculate percentage of deviation
+    percentage_deviation = 0.0
+    if grand_total_f != 0:
+        percentage_deviation = abs((net_difference / grand_total_f) * 100)
+    
+    # Net difference should always be shown as absolute value with proper label
+    net_difference_abs = abs(net_difference)
+    is_saving = net_difference < 0
     
     deviation_data["summary"] = {
         "work_order_total": round(work_order_total),
@@ -247,9 +263,15 @@ def process_bill(ws_wo, ws_bq, ws_extra, premium_percent, premium_type):
         "premium": {"percent": premium_percent / 100, "type": premium_type},
         "tender_premium_f": tender_premium_f,
         "tender_premium_h": tender_premium_h,
-        "grand_total_f": round(work_order_total + tender_premium_f),
-        "grand_total_h": round(executed_total + tender_premium_h),
-        "net_difference": round((executed_total + tender_premium_h) - (work_order_total + tender_premium_f))
+        "tender_premium_j": tender_premium_j,
+        "tender_premium_l": tender_premium_l,
+        "grand_total_f": grand_total_f,
+        "grand_total_h": grand_total_h,
+        "grand_total_j": grand_total_j,
+        "grand_total_l": grand_total_l,
+        "net_difference": net_difference_abs,  # Always positive
+        "is_saving": is_saving,  # True if saving, False if excess
+        "percentage_deviation": round(percentage_deviation, 2)  # Percentage with 2 decimals
     }
 
     return first_page_data, last_page_data, deviation_data, extra_items_data, note_sheet_data

@@ -4,12 +4,53 @@
     <meta charset="UTF-8">
     <title>CONTRACTOR BILL</title>
     <style>
-        @page { size: A4 portrait; margin: 10mm 11mm; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Calibri, sans-serif; font-size: 8pt; margin: 0; line-height: 1.2; }
-        .container { width: 188mm; min-height: 277mm; margin: 0; padding: 0; }
-        table { width: 188mm; border-collapse: collapse; table-layout: fixed; font-size: 8pt; }
-        th, td { border: 1px solid black; padding: 3px 2px; text-align: left; vertical-align: top; overflow: hidden; word-wrap: break-word; }
+        @page { 
+            size: A4 portrait; 
+            margin: 10mm; 
+        }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        html {
+            zoom: 1.0;
+            -webkit-text-size-adjust: none;
+        }
+        body { 
+            font-family: Calibri, sans-serif; 
+            font-size: 8pt; 
+            margin: 0; 
+            line-height: 1.2;
+            width: 190mm;
+            max-width: 190mm;
+        }
+        .container { 
+            width: 190mm; 
+            max-width: 190mm;
+            min-height: 277mm; 
+            margin: 0; 
+            padding: 0; 
+        }
+        table { 
+            width: 190mm !important; 
+            max-width: 190mm !important;
+            min-width: 190mm !important;
+            border-collapse: collapse; 
+            table-layout: fixed !important; 
+            font-size: 8pt;
+        }
+        th, td { 
+            border: 1px solid black; 
+            padding: 3px 2px; 
+            text-align: left; 
+            vertical-align: top; 
+            overflow: hidden; 
+            word-wrap: break-word;
+            white-space: normal;
+        }
         .header { text-align: left; margin-bottom: 8px; }
         .header h2 { font-size: 11pt; margin-bottom: 4px; }
         .header p { margin: 1px 0; font-size: 8pt; }
@@ -41,27 +82,27 @@
         </div>
         <table>
             <colgroup>
-                <col style="width: 10.06mm;">
-                <col style="width: 13.76mm;">
-                <col style="width: 13.76mm;">
-                <col style="width: 9.55mm;">
-                <col style="width: 63.83mm;">
-                <col style="width: 13.16mm;">
-                <col style="width: 19.53mm;">
-                <col style="width: 15.15mm;">
-                <col style="width: 11.96mm;">
+                <col style="width: 11mm;">
+                <col style="width: 16mm;">
+                <col style="width: 16mm;">
+                <col style="width: 11mm;">
+                <col style="width: 70mm;">
+                <col style="width: 15mm;">
+                <col style="width: 22mm;">
+                <col style="width: 17mm;">
+                <col style="width: 12mm;">
             </colgroup>
             <thead>
                 <tr>
-                    <th>Unit</th>
-                    <th>Quantity executed (or supplied) since last certificate</th>
-                    <th>Quantity executed (or supplied) upto date as per MB</th>
-                    <th>S. No.</th>
-                    <th>Item of Work supplies (Grouped under "sub-head" and "sub work" of estimate)</th>
-                    <th>Rate</th>
-                    <th>Upto date Amount</th>
-                    <th>Amount Since previous bill (Total for each sub-head)</th>
-                    <th>Remarks</th>
+                    <th style="width: 11mm;">Unit</th>
+                    <th style="width: 16mm;">Quantity executed (or supplied) since last certificate</th>
+                    <th style="width: 16mm;">Quantity executed (or supplied) upto date as per MB</th>
+                    <th style="width: 11mm;">S. No.</th>
+                    <th style="width: 70mm;">Item of Work supplies (Grouped under "sub-head" and "sub work" of estimate)</th>
+                    <th style="width: 15mm;">Rate</th>
+                    <th style="width: 22mm;">Upto date Amount</th>
+                    <th style="width: 17mm;">Amount Since previous bill (Total for each sub-head)</th>
+                    <th style="width: 12mm;">Remarks</th>
                 </tr>
             </thead>
             <tbody>
@@ -83,7 +124,7 @@
                     <td>Grand Total Rs.</td>
                     <td></td>
                     <td>{{ data.totals.grand_total | default("") }}</td>
-                    <td></td>
+                    <td>{{ data.totals.grand_total | default("") }}</td>
                     <td></td>
                 </tr>
                 <tr>
@@ -91,14 +132,11 @@
                     <td>Tender Premium @ {{ "%.2f%%" % (data.totals.premium.percent * 100) if data.totals.premium.percent is not none else "" }}</td>
                     <td>{{ "%.2f%%" % (data.totals.premium.percent * 100) if data.totals.premium.percent is not none else "" }}</td>
                     <td>{{ data.totals.premium.amount | default("") }}</td>
-                    <td></td>
+                    <td>{{ data.totals.premium.amount | default("") }}</td>
                     <td></td>
                 </tr>               
                 <tr>
-                    <td></td>
-                    <td class="center-align">{{ data.totals.get('extra_items_sum', 'NIL') if data.totals.get('extra_items_sum') and data.totals.get('extra_items_sum') > 0 else 'NIL' }}</td>
-                    <td></td>
-                    <td></td>
+                    <td colspan="4" class="center-align">{{ data.totals.get('extra_items_sum', 'NIL') if data.totals.get('extra_items_sum') and data.totals.get('extra_items_sum') > 0 else 'NIL' }}</td>
                     <td>Sum of Extra Items (including Tender Premium) (See on Left) Rs.</td>
                     <td></td>
                     <td></td>
@@ -110,7 +148,23 @@
                     <td>Payable Amount Rs.</td>
                     <td></td>
                     <td>{{ data.totals.payable | default("") }}</td>
+                    <td>{{ data.totals.payable | default("") }}</td>
                     <td></td>
+                </tr>
+                <tr>
+                    <td colspan="4"></td>
+                    <td>Less Amount Paid vide Last Bill Rs.</td>
+                    <td></td>
+                    <td>{{ data.totals.last_bill_amount | round(2) if data.totals.last_bill_amount else "0.00" }}</td>
+                    <td>{{ data.totals.last_bill_amount | round(2) if data.totals.last_bill_amount else "0.00" }}</td>
+                    <td></td>
+                </tr>
+                <tr style="background-color: #f0f0f0;">
+                    <td colspan="4"></td>
+                    <td style="font-weight: bold;">Net Payable Amount Rs.</td>
+                    <td></td>
+                    <td style="font-weight: bold;">{{ data.totals.net_payable | default(data.totals.payable) | round(2) }}</td>
+                    <td style="font-weight: bold;">{{ data.totals.net_payable | default(data.totals.payable) | round(2) }}</td>
                     <td></td>
                 </tr>
             </tbody>

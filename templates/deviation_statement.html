@@ -4,12 +4,53 @@
     <meta charset="UTF-8">
     <title>Deviation Statement</title>
     <style>
-        @page { size: A4 landscape; margin: 10mm 11mm; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Calibri, sans-serif; font-size: 8pt; margin: 0; line-height: 1.2; }
-        .container { width: 275mm; min-height: 188mm; margin: 0; padding: 0; }
-        table { width: 275mm; border-collapse: collapse; table-layout: fixed; font-size: 8pt; }
-        th, td { border: 1px solid black; padding: 3px 2px; text-align: left; vertical-align: top; overflow: hidden; word-wrap: break-word; }
+        @page { 
+            size: A4 landscape; 
+            margin: 10mm; 
+        }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        html {
+            zoom: 1.0;
+            -webkit-text-size-adjust: none;
+        }
+        body { 
+            font-family: Calibri, sans-serif; 
+            font-size: 8pt; 
+            margin: 0; 
+            line-height: 1.2;
+            width: 277mm;
+            max-width: 277mm;
+        }
+        .container { 
+            width: 277mm; 
+            max-width: 277mm;
+            min-height: 190mm; 
+            margin: 0; 
+            padding: 0; 
+        }
+        table { 
+            width: 277mm !important; 
+            max-width: 277mm !important;
+            min-width: 277mm !important;
+            border-collapse: collapse; 
+            table-layout: fixed !important; 
+            font-size: 8pt;
+        }
+        th, td { 
+            border: 1px solid black; 
+            padding: 3px 2px; 
+            text-align: left; 
+            vertical-align: top; 
+            overflow: hidden; 
+            word-wrap: break-word;
+            white-space: normal;
+        }
         .header { text-align: center; margin-bottom: 8px; }
         .header h2 { font-size: 11pt; margin-bottom: 4px; }
     </style>
@@ -21,42 +62,43 @@
         </div>
         <table>
             <colgroup>
-                <col style="width: 6mm;">
-                <col style="width: 118mm;">
-                <col style="width: 10.5mm;">
-                <col style="width: 10.5mm;">
-                <col style="width: 10.5mm;">
-                <col style="width: 10.5mm;">
-                <col style="width: 10.5mm;">
-                <col style="width: 10.5mm;">
-                <col style="width: 10.5mm;">
-                <col style="width: 10.5mm;">
-                <col style="width: 10.5mm;">
-                <col style="width: 10.5mm;">
-                <col style="width: 48mm;">
+                <col style="width: 8mm;">
+                <col style="width: 120mm;">
+                <col style="width: 12mm;">
+                <col style="width: 12mm;">
+                <col style="width: 12mm;">
+                <col style="width: 12mm;">
+                <col style="width: 12mm;">
+                <col style="width: 12mm;">
+                <col style="width: 12mm;">
+                <col style="width: 12mm;">
+                <col style="width: 12mm;">
+                <col style="width: 12mm;">
+                <col style="width: 37mm;">
             </colgroup>
             <thead>
                 <tr>
-                    <th>ITEM No.</th>
-                    <th>Description</th>
-                    <th>Unit</th>
-                    <th>Qty as per Work Order</th>
-                    <th>Rate</th>
-                    <th>Amt as per Work Order Rs.</th>
-                    <th>Qty Executed</th>
-                    <th>Amt as per Executed Rs.</th>
-                    <th>Excess Qty</th>
-                    <th>Excess Amt Rs.</th>
-                    <th>Saving Qty</th>
-                    <th>Saving Amt Rs.</th>
-                    <th>REMARKS/ REASON.</th>
+                    <th style="width: 8mm;">ITEM No.</th>
+                    <th style="width: 120mm;">Description</th>
+                    <th style="width: 12mm;">Unit</th>
+                    <th style="width: 12mm;">Qty as per Work Order</th>
+                    <th style="width: 12mm;">Rate</th>
+                    <th style="width: 12mm;">Amt as per Work Order Rs.</th>
+                    <th style="width: 12mm;">Qty Executed</th>
+                    <th style="width: 12mm;">Amt as per Executed Rs.</th>
+                    <th style="width: 12mm;">Excess Qty</th>
+                    <th style="width: 12mm;">Excess Amt Rs.</th>
+                    <th style="width: 12mm;">Saving Qty</th>
+                    <th style="width: 12mm;">Saving Amt Rs.</th>
+                    <th style="width: 37mm;">REMARKS/ REASON.</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in data["items"] %}
-                    <tr>
+                    <tr {% if item.get('is_divider') %}style="font-weight: bold; background-color: #f0f0f0;"{% endif %}>
                         <td>{{ item.serial_no | default("") }}</td>
-                        <td>{{ item.description | default("") }}</td>
+                        <td {% if item.get('is_divider') %}colspan="12" style="text-align: center;"{% endif %}>{{ item.description | default("") }}</td>
+                        {% if not item.get('is_divider') %}
                         <td>{{ item.unit | default("") }}</td>
                         <td>{{ item.qty_wo | default("") }}</td>
                         <td>{{ item.rate | default("") }}</td>
@@ -68,6 +110,7 @@
                         <td>{{ item.saving_qty | default("") }}</td>
                         <td>{{ item.saving_amt | default("") }}</td>
                         <td>{{ item.remark | default("") }}</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 <tr>
@@ -117,11 +160,11 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td>
-                        {% if data.summary.net_difference > 0 %}
-                            Overall Excess With Respect to the Work Order Amount Rs.
-                        {% else %}
+                    <td style="text-align: left;">
+                        {% if data.summary.is_saving %}
                             Overall Saving With Respect to the Work Order Amount Rs.
+                        {% else %}
+                            Overall Excess With Respect to the Work Order Amount Rs.
                         {% endif %}
                     </td>
                     <td></td>
@@ -138,7 +181,7 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td>
+                    <td style="text-align: left;">
                         Percentage of Deviation %
                     </td>
                     <td></td>
@@ -146,7 +189,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{ '%0.2f%%' | format(((data.summary.overall_excess | float) / (data.summary.work_order_total | float) * 100) if (data.summary.work_order_total | float) > 0 else 0) }}</td>
+                    <td>{{ '%0.2f%%' | format(data.summary.percentage_deviation) }}</td>
                     <td></td>
                     <td></td>
                     <td></td>

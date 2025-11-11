@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Processing Results - 20251111_124059</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .timestamp {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            background: #f3f4f6;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        .result-card {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        .result-card.success {
+            border-color: #10b981;
+        }
+        .result-card.failed {
+            border-color: #ef4444;
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .result-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #374151;
+        }
+        .result-status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .result-status.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .result-status.failed {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .detail-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+        }
+        .detail-label {
+            font-size: 0.85em;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        .detail-value {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #374151;
+        }
+        .files-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        .file-link {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: block;
+        }
+        .file-link:hover {
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+            transform: translateY(-1px);
+        }
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Batch Processing Results</h1>
+        <div class="timestamp">
+            🕐 Generated: 11 November 2025, 12:41:00 PM<br>
+            📁 Batch ID: 20251111_124059
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value">8</div>
+                <div class="stat-label">Total Files</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">8</div>
+                <div class="stat-label">Successful</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Failed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">48</div>
+                <div class="stat-label">HTML Files</div>
+            </div>
+        </div>
+
+        <div class="result-card success">
+            <div class="result-header">
+                <div class="result-title">📄 old_ BILL INPUT- NO EXTRA ITEMS.xlsx</div>
+                <div class="result-status success">SUCCESS</div>
+            </div>
+
+            <div class="result-details">
+                <div class="detail-item">
+                    <div class="detail-label">Grand Total</div>
+                    <div class="detail-value">₹452,574.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Premium (5%)</div>
+                    <div class="detail-value">₹22,629.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Payable Amount</div>
+                    <div class="detail-value">₹475,203.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Net Difference</div>
+                    <div class="detail-value">₹20,124.00 (Saving)</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Percentage Deviation</div>
+                    <div class="detail-value">4.06%</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Output Folder</div>
+                    <div class="detail-value" style="font-size: 0.9em;">20251111_124059_old_bill_input_no_extra_items</div>
+                </div>
+            </div>
+            
+            <div class="files-list">
+                <a href="20251111_124059_old_bill_input_no_extra_items\first_page.html" target="_blank" class="file-link">📄 first_page.html</a>
+                <a href="20251111_124059_old_bill_input_no_extra_items\deviation_statement.html" target="_blank" class="file-link">📄 deviation_statement.html</a>
+                <a href="20251111_124059_old_bill_input_no_extra_items\extra_items.html" target="_blank" class="file-link">📄 extra_items.html</a>
+                <a href="20251111_124059_old_bill_input_no_extra_items\note_sheet.html" target="_blank" class="file-link">📄 note_sheet.html</a>
+                <a href="20251111_124059_old_bill_input_no_extra_items\certificate_ii.html" target="_blank" class="file-link">📄 certificate_ii.html</a>
+                <a href="20251111_124059_old_bill_input_no_extra_items\certificate_iii.html" target="_blank" class="file-link">📄 certificate_iii.html</a>
+
+            </div>
+
+        </div>
+
+        <div class="result-card success">
+            <div class="result-header">
+                <div class="result-title">📄 old_1 BILL INPUT- WITH EXTRA ITEMS.xlsx</div>
+                <div class="result-status success">SUCCESS</div>
+            </div>
+
+            <div class="result-details">
+                <div class="detail-item">
+                    <div class="detail-label">Grand Total</div>
+                    <div class="detail-value">₹459,628.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Premium (5%)</div>
+                    <div class="detail-value">₹22,981.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Payable Amount</div>
+                    <div class="detail-value">₹482,609.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Net Difference</div>
+                    <div class="detail-value">₹12,718.00 (Saving)</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Percentage Deviation</div>
+                    <div class="detail-value">2.57%</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Output Folder</div>
+                    <div class="detail-value" style="font-size: 0.9em;">20251111_124059_old_1_bill_input_with_extra_items</div>
+                </div>
+            </div>
+            
+            <div class="files-list">
+                <a href="20251111_124059_old_1_bill_input_with_extra_items\first_page.html" target="_blank" class="file-link">📄 first_page.html</a>
+                <a href="20251111_124059_old_1_bill_input_with_extra_items\deviation_statement.html" target="_blank" class="file-link">📄 deviation_statement.html</a>
+                <a href="20251111_124059_old_1_bill_input_with_extra_items\extra_items.html" target="_blank" class="file-link">📄 extra_items.html</a>
+                <a href="20251111_124059_old_1_bill_input_with_extra_items\note_sheet.html" target="_blank" class="file-link">📄 note_sheet.html</a>
+                <a href="20251111_124059_old_1_bill_input_with_extra_items\certificate_ii.html" target="_blank" class="file-link">📄 certificate_ii.html</a>
+                <a href="20251111_124059_old_1_bill_input_with_extra_items\certificate_iii.html" target="_blank" class="file-link">📄 certificate_iii.html</a>
+
+            </div>
+
+        </div>
+
+        <div class="result-card success">
+            <div class="result-header">
+                <div class="result-title">📄 old_2 BILL INPUT- NO EXTRA ITEMS.xlsx</div>
+                <div class="result-status success">SUCCESS</div>
+            </div>
+
+            <div class="result-details">
+                <div class="detail-item">
+                    <div class="detail-label">Grand Total</div>
+                    <div class="detail-value">₹441,138.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Premium (5%)</div>
+                    <div class="detail-value">₹22,057.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Payable Amount</div>
+                    <div class="detail-value">₹463,195.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Net Difference</div>
+                    <div class="detail-value">₹107,693.00 (Excess)</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Percentage Deviation</div>
+                    <div class="detail-value">30.29%</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Output Folder</div>
+                    <div class="detail-value" style="font-size: 0.9em;">20251111_124059_old_2_bill_input_no_extra_items</div>
+                </div>
+            </div>
+            
+            <div class="files-list">
+                <a href="20251111_124059_old_2_bill_input_no_extra_items\first_page.html" target="_blank" class="file-link">📄 first_page.html</a>
+                <a href="20251111_124059_old_2_bill_input_no_extra_items\deviation_statement.html" target="_blank" class="file-link">📄 deviation_statement.html</a>
+                <a href="20251111_124059_old_2_bill_input_no_extra_items\extra_items.html" target="_blank" class="file-link">📄 extra_items.html</a>
+                <a href="20251111_124059_old_2_bill_input_no_extra_items\note_sheet.html" target="_blank" class="file-link">📄 note_sheet.html</a>
+                <a href="20251111_124059_old_2_bill_input_no_extra_items\certificate_ii.html" target="_blank" class="file-link">📄 certificate_ii.html</a>
+                <a href="20251111_124059_old_2_bill_input_no_extra_items\certificate_iii.html" target="_blank" class="file-link">📄 certificate_iii.html</a>
+
+            </div>
+
+        </div>
+
+        <div class="result-card success">
+            <div class="result-header">
+                <div class="result-title">📄 old_23BILL INPUT- NO EXTRA ITEMS.xlsx</div>
+                <div class="result-status success">SUCCESS</div>
+            </div>
+
+            <div class="result-details">
+                <div class="detail-item">
+                    <div class="detail-label">Grand Total</div>
+                    <div class="detail-value">₹452,574.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Premium (5%)</div>
+                    <div class="detail-value">₹22,629.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Payable Amount</div>
+                    <div class="detail-value">₹475,203.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Net Difference</div>
+                    <div class="detail-value">₹20,124.00 (Saving)</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Percentage Deviation</div>
+                    <div class="detail-value">4.06%</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Output Folder</div>
+                    <div class="detail-value" style="font-size: 0.9em;">20251111_124059_old_23bill_input_no_extra_items</div>
+                </div>
+            </div>
+            
+            <div class="files-list">
+                <a href="20251111_124059_old_23bill_input_no_extra_items\first_page.html" target="_blank" class="file-link">📄 first_page.html</a>
+                <a href="20251111_124059_old_23bill_input_no_extra_items\deviation_statement.html" target="_blank" class="file-link">📄 deviation_statement.html</a>
+                <a href="20251111_124059_old_23bill_input_no_extra_items\extra_items.html" target="_blank" class="file-link">📄 extra_items.html</a>
+                <a href="20251111_124059_old_23bill_input_no_extra_items\note_sheet.html" target="_blank" class="file-link">📄 note_sheet.html</a>
+                <a href="20251111_124059_old_23bill_input_no_extra_items\certificate_ii.html" target="_blank" class="file-link">📄 certificate_ii.html</a>
+                <a href="20251111_124059_old_23bill_input_no_extra_items\certificate_iii.html" target="_blank" class="file-link">📄 certificate_iii.html</a>
+
+            </div>
+
+        </div>
+
+        <div class="result-card success">
+            <div class="result-header">
+                <div class="result-title">📄 old_BILL INPUT- WITH EXTRA ITEMS.xlsx</div>
+                <div class="result-status success">SUCCESS</div>
+            </div>
+
+            <div class="result-details">
+                <div class="detail-item">
+                    <div class="detail-label">Grand Total</div>
+                    <div class="detail-value">₹395,675.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Premium (5%)</div>
+                    <div class="detail-value">₹19,784.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Payable Amount</div>
+                    <div class="detail-value">₹415,459.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Net Difference</div>
+                    <div class="detail-value">₹59,957.00 (Excess)</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Percentage Deviation</div>
+                    <div class="detail-value">16.87%</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Output Folder</div>
+                    <div class="detail-value" style="font-size: 0.9em;">20251111_124059_old_bill_input_with_extra_items</div>
+                </div>
+            </div>
+            
+            <div class="files-list">
+                <a href="20251111_124059_old_bill_input_with_extra_items\first_page.html" target="_blank" class="file-link">📄 first_page.html</a>
+                <a href="20251111_124059_old_bill_input_with_extra_items\deviation_statement.html" target="_blank" class="file-link">📄 deviation_statement.html</a>
+                <a href="20251111_124059_old_bill_input_with_extra_items\extra_items.html" target="_blank" class="file-link">📄 extra_items.html</a>
+                <a href="20251111_124059_old_bill_input_with_extra_items\note_sheet.html" target="_blank" class="file-link">📄 note_sheet.html</a>
+                <a href="20251111_124059_old_bill_input_with_extra_items\certificate_ii.html" target="_blank" class="file-link">📄 certificate_ii.html</a>
+                <a href="20251111_124059_old_bill_input_with_extra_items\certificate_iii.html" target="_blank" class="file-link">📄 certificate_iii.html</a>
+
+            </div>
+
+        </div>
+
+        <div class="result-card success">
+            <div class="result-header">
+                <div class="result-title">📄 PRIYANKA SAMPLE BILL INPUT- NO EXTRA ITEMS.xlsx</div>
+                <div class="result-status success">SUCCESS</div>
+            </div>
+
+            <div class="result-details">
+                <div class="detail-item">
+                    <div class="detail-label">Grand Total</div>
+                    <div class="detail-value">₹452,574.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Premium (5%)</div>
+                    <div class="detail-value">₹22,629.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Payable Amount</div>
+                    <div class="detail-value">₹475,203.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Net Difference</div>
+                    <div class="detail-value">₹20,124.00 (Saving)</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Percentage Deviation</div>
+                    <div class="detail-value">4.06%</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Output Folder</div>
+                    <div class="detail-value" style="font-size: 0.9em;">20251111_124059_priyanka_sample_bill_input_no_extra_items</div>
+                </div>
+            </div>
+            
+            <div class="files-list">
+                <a href="20251111_124059_priyanka_sample_bill_input_no_extra_items\first_page.html" target="_blank" class="file-link">📄 first_page.html</a>
+                <a href="20251111_124059_priyanka_sample_bill_input_no_extra_items\deviation_statement.html" target="_blank" class="file-link">📄 deviation_statement.html</a>
+                <a href="20251111_124059_priyanka_sample_bill_input_no_extra_items\extra_items.html" target="_blank" class="file-link">📄 extra_items.html</a>
+                <a href="20251111_124059_priyanka_sample_bill_input_no_extra_items\note_sheet.html" target="_blank" class="file-link">📄 note_sheet.html</a>
+                <a href="20251111_124059_priyanka_sample_bill_input_no_extra_items\certificate_ii.html" target="_blank" class="file-link">📄 certificate_ii.html</a>
+                <a href="20251111_124059_priyanka_sample_bill_input_no_extra_items\certificate_iii.html" target="_blank" class="file-link">📄 certificate_iii.html</a>
+
+            </div>
+
+        </div>
+
+        <div class="result-card success">
+            <div class="result-header">
+                <div class="result-title">📄 PRIYANKA SAMPLE BILL INPUT- WITH EXTRA ITEMS.xlsx</div>
+                <div class="result-status success">SUCCESS</div>
+            </div>
+
+            <div class="result-details">
+                <div class="detail-item">
+                    <div class="detail-label">Grand Total</div>
+                    <div class="detail-value">₹459,628.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Premium (5%)</div>
+                    <div class="detail-value">₹22,981.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Payable Amount</div>
+                    <div class="detail-value">₹482,609.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Net Difference</div>
+                    <div class="detail-value">₹12,718.00 (Saving)</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Percentage Deviation</div>
+                    <div class="detail-value">2.57%</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Output Folder</div>
+                    <div class="detail-value" style="font-size: 0.9em;">20251111_124059_priyanka_sample_bill_input_with_extra_items</div>
+                </div>
+            </div>
+            
+            <div class="files-list">
+                <a href="20251111_124059_priyanka_sample_bill_input_with_extra_items\first_page.html" target="_blank" class="file-link">📄 first_page.html</a>
+                <a href="20251111_124059_priyanka_sample_bill_input_with_extra_items\deviation_statement.html" target="_blank" class="file-link">📄 deviation_statement.html</a>
+                <a href="20251111_124059_priyanka_sample_bill_input_with_extra_items\extra_items.html" target="_blank" class="file-link">📄 extra_items.html</a>
+                <a href="20251111_124059_priyanka_sample_bill_input_with_extra_items\note_sheet.html" target="_blank" class="file-link">📄 note_sheet.html</a>
+                <a href="20251111_124059_priyanka_sample_bill_input_with_extra_items\certificate_ii.html" target="_blank" class="file-link">📄 certificate_ii.html</a>
+                <a href="20251111_124059_priyanka_sample_bill_input_with_extra_items\certificate_iii.html" target="_blank" class="file-link">📄 certificate_iii.html</a>
+
+            </div>
+
+        </div>
+
+        <div class="result-card success">
+            <div class="result-header">
+                <div class="result-title">📄 SAMPLE BILL INPUT- NO EXTRA ITEMS.xlsx</div>
+                <div class="result-status success">SUCCESS</div>
+            </div>
+
+            <div class="result-details">
+                <div class="detail-item">
+                    <div class="detail-label">Grand Total</div>
+                    <div class="detail-value">₹441,138.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Premium (5%)</div>
+                    <div class="detail-value">₹22,057.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Payable Amount</div>
+                    <div class="detail-value">₹463,195.00</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Net Difference</div>
+                    <div class="detail-value">₹107,693.00 (Excess)</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Percentage Deviation</div>
+                    <div class="detail-value">30.29%</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Output Folder</div>
+                    <div class="detail-value" style="font-size: 0.9em;">20251111_124059_sample_bill_input_no_extra_items</div>
+                </div>
+            </div>
+            
+            <div class="files-list">
+                <a href="20251111_124059_sample_bill_input_no_extra_items\first_page.html" target="_blank" class="file-link">📄 first_page.html</a>
+                <a href="20251111_124059_sample_bill_input_no_extra_items\deviation_statement.html" target="_blank" class="file-link">📄 deviation_statement.html</a>
+                <a href="20251111_124059_sample_bill_input_no_extra_items\extra_items.html" target="_blank" class="file-link">📄 extra_items.html</a>
+                <a href="20251111_124059_sample_bill_input_no_extra_items\note_sheet.html" target="_blank" class="file-link">📄 note_sheet.html</a>
+                <a href="20251111_124059_sample_bill_input_no_extra_items\certificate_ii.html" target="_blank" class="file-link">📄 certificate_ii.html</a>
+                <a href="20251111_124059_sample_bill_input_no_extra_items\certificate_iii.html" target="_blank" class="file-link">📄 certificate_iii.html</a>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>

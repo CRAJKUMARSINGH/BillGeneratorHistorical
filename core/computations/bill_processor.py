@@ -30,10 +30,11 @@ def number_to_words(number):
     try:
         from num2words import num2words
         return num2words(int(number), lang="en_IN").title()
-    except:
+    except (ImportError, ValueError, TypeError) as e:
+        # Fallback if num2words not available or invalid number
         return str(number)
 
-def process_bill(ws_wo, ws_bq, ws_extra, premium_percent, premium_type):
+def process_bill(ws_wo, ws_bq, ws_extra, premium_percent, premium_type, previous_bill_amount=0):
     """
     Process bill data from Excel sheets
     
@@ -43,6 +44,7 @@ def process_bill(ws_wo, ws_bq, ws_extra, premium_percent, premium_type):
         ws_extra: Extra Items worksheet
         premium_percent: Tender premium percentage
         premium_type: "above" or "below"
+        previous_bill_amount: Amount paid in previous bill (default: 0)
     
     Returns:
         tuple: (first_page_data, last_page_data, deviation_data, extra_items_data, note_sheet_data)
@@ -115,17 +117,29 @@ def process_bill(ws_wo, ws_bq, ws_extra, premium_percent, premium_type):
                 "is_divider": False
             }
         else:
+            # Calculate amounts
+            amount_upto_date = round(qty * rate) if qty and rate else 0
+            # For "Amount Since previous bill" (Column 8):
+            # This should be the incremental amount in THIS bill only
+            # If this is first bill, amount_since_previous = amount_upto_date
+            # If running bill, amount_since_previous = amount_upto_date - previous_bill_item_amount
+            # For now, we assume first bill, so both are same
+            # FUTURE ENHANCEMENT: Add logic to read previous bill item amounts from Excel
+            # This would require an additional sheet or columns in the Excel file
+            # to track item-wise amounts from previous bills
+            amount_since_previous = amount_upto_date  # Same as upto_date for first bill
+            
             item = {
                 "serial_no": str(ws_wo.iloc[i, 0]) if pd.notnull(ws_wo.iloc[i, 0]) else "",
                 "description": str(ws_wo.iloc[i, 1]) if pd.notnull(ws_wo.iloc[i, 1]) else "",
                 "unit": str(ws_wo.iloc[i, 2]) if pd.notnull(ws_wo.iloc[i, 2]) else "",
                 "quantity": qty,
-                "quantity_since_last": qty,  # For template compatibility
-                "quantity_upto_date": qty,   # For template compatibility
+                "quantity_since_last": qty,  # Quantity in THIS bill only
+                "quantity_upto_date": qty,   # Cumulative quantity (for first bill, same as since_last)
                 "rate": rate,
                 "remark": str(ws_wo.iloc[i, 6]) if pd.notnull(ws_wo.iloc[i, 6]) else "",
-                "amount": round(qty * rate) if qty and rate else 0,
-                "amount_previous": round(qty * rate) if qty and rate else 0,  # For template compatibility
+                "amount": amount_upto_date,  # Column 7: Upto date Amount (cumulative)
+                "amount_previous": amount_since_previous,  # Column 8: Amount Since previous bill (incremental)
                 "is_divider": False
             }
         first_page_data["items"].append(item)
@@ -219,10 +233,15 @@ def process_bill(ws_wo, ws_bq, ws_extra, premium_percent, premium_type):
     premium_amount = round(total_amount * (premium_percent / 100) if premium_type == "above" else -total_amount * (premium_percent / 100))
     payable_amount = round(safe_float(total_amount) + safe_float(premium_amount))
 
+    # Calculate net payable after deducting previous bill amount
+    net_payable = round(safe_float(payable_amount) - safe_float(previous_bill_amount))
+    
     first_page_data["totals"] = {
         "grand_total": total_amount,
         "premium": {"percent": premium_percent / 100, "type": premium_type, "amount": premium_amount},
-        "payable": payable_amount
+        "payable": payable_amount,
+        "last_bill_amount": previous_bill_amount if previous_bill_amount > 0 else 0,
+        "net_payable": net_payable if previous_bill_amount > 0 else payable_amount
     }
 
     try:
@@ -349,6 +368,107 @@ def process_bill(ws_wo, ws_bq, ws_extra, premium_percent, premium_type):
         overall_excess += deviation_item_excess_amt
         overall_saving += deviation_item_saving_amt
 
+    # Add Extra Items divider to deviation statement
+    deviation_data["items"].append({
+        "serial_no": "",
+        "description": "Extra Items (With Premium)",
+        "unit": "",
+        "qty_wo": 0,
+        "rate": 0,
+        "amt_wo": 0,
+        "qty_bill": 0,
+        "amt_bill": 0,
+        "excess_qty": 0,
+        "excess_amt": 0,
+        "saving_qty": 0,
+        "saving_amt": 0,
+        "remark": "",
+        "is_divider": True
+    })
+
+    # Process Extra Items for Deviation Statement
+    extra_items_wo_total = 0
+    extra_items_bill_total = 0
+    
+    for j in range(6, last_row_extra):
+        qty_raw = ws_extra.iloc[j, 3] if pd.notnull(ws_extra.iloc[j, 3]) else None
+        rate_raw = ws_extra.iloc[j, 5] if pd.notnull(ws_extra.iloc[j, 5]) else None
+
+        qty = 0
+        if isinstance(qty_raw, (int, float)):
+            qty = float(qty_raw)
+        elif isinstance(qty_raw, str):
+            cleaned_qty = qty_raw.strip().replace(',', '').replace(' ', '')
+            if cleaned_qty == '':
+                qty = 0
+            else:
+                try:
+                    qty = float(cleaned_qty)
+                except ValueError:
+                    qty = 0
+
+        rate = 0
+        if isinstance(rate_raw, (int, float)):
+            rate = float(rate_raw)
+        elif isinstance(rate_raw, str):
+            cleaned_rate = rate_raw.strip().replace(',', '').replace(' ', '')
+            if cleaned_rate == '':
+                rate = 0
+            else:
+                try:
+                    rate = float(cleaned_rate)
+                except ValueError:
+                    rate = 0
+
+        # For extra items in deviation: qty_wo = 0 (not in work order), qty_bill = qty (executed)
+        amt_wo = 0  # Extra items not in work order
+        amt_bill = round(qty * rate) if qty and rate else 0
+        excess_qty = qty  # All extra item quantity is excess
+        excess_amt = amt_bill  # All extra item amount is excess
+        
+        if rate is None or rate == 0:
+            extra_item = {
+                "serial_no": str(ws_extra.iloc[j, 0]) if pd.notnull(ws_extra.iloc[j, 0]) else "",
+                "description": str(ws_extra.iloc[j, 2]) if pd.notnull(ws_extra.iloc[j, 2]) else "",
+                "unit": "",
+                "qty_wo": "",
+                "rate": "",
+                "amt_wo": "",
+                "qty_bill": "",
+                "amt_bill": "",
+                "excess_qty": "",
+                "excess_amt": "",
+                "saving_qty": "",
+                "saving_amt": "",
+                "remark": str(ws_extra.iloc[j, 1]) if pd.notnull(ws_extra.iloc[j, 1]) else ""
+            }
+        else:
+            extra_item = {
+                "serial_no": str(ws_extra.iloc[j, 0]) if pd.notnull(ws_extra.iloc[j, 0]) else "",
+                "description": str(ws_extra.iloc[j, 2]) if pd.notnull(ws_extra.iloc[j, 2]) else "",
+                "unit": str(ws_extra.iloc[j, 4]) if pd.notnull(ws_extra.iloc[j, 4]) else "",
+                "qty_wo": 0,  # Not in work order
+                "rate": rate,
+                "amt_wo": 0,  # Not in work order
+                "qty_bill": qty,
+                "amt_bill": amt_bill,
+                "excess_qty": excess_qty,
+                "excess_amt": excess_amt,
+                "saving_qty": 0,  # No savings for extra items
+                "saving_amt": 0,  # No savings for extra items
+                "remark": str(ws_extra.iloc[j, 1]) if pd.notnull(ws_extra.iloc[j, 1]) else ""
+            }
+            # Add to totals
+            extra_items_wo_total += 0  # Not in work order
+            extra_items_bill_total += amt_bill
+        
+        deviation_data["items"].append(extra_item)
+    
+    # Update totals to include extra items
+    work_order_total += extra_items_wo_total  # 0 for extra items
+    executed_total += extra_items_bill_total
+    overall_excess += extra_items_bill_total  # All extra items are excess
+
     # Deviation Summary
     tender_premium_f = round(safe_float(work_order_total) * (premium_percent / 100) if premium_type == "above" else -safe_float(work_order_total) * (premium_percent / 100))
     tender_premium_h = round(safe_float(executed_total) * (premium_percent / 100) if premium_type == "above" else -safe_float(executed_total) * (premium_percent / 100))
@@ -359,6 +479,17 @@ def process_bill(ws_wo, ws_bq, ws_extra, premium_percent, premium_type):
     grand_total_j = round(safe_float(overall_excess) + safe_float(tender_premium_j))
     grand_total_l = round(safe_float(overall_saving) + safe_float(tender_premium_l))
     net_difference = round(safe_float(grand_total_h) - safe_float(grand_total_f))
+    
+    # Calculate percentage of deviation
+    # Percentage = (net_difference / grand_total_f) * 100
+    percentage_deviation = 0.0
+    if grand_total_f != 0:
+        percentage_deviation = abs((net_difference / grand_total_f) * 100)
+    
+    # Net difference should always be shown as absolute value with proper label
+    # If negative, it's a saving; if positive, it's excess
+    net_difference_abs = abs(net_difference)
+    is_saving = net_difference < 0
 
     deviation_data["summary"] = {
         "work_order_total": round(work_order_total),
@@ -374,7 +505,9 @@ def process_bill(ws_wo, ws_bq, ws_extra, premium_percent, premium_type):
         "grand_total_h": grand_total_h,
         "grand_total_j": grand_total_j,
         "grand_total_l": grand_total_l,
-        "net_difference": net_difference
+        "net_difference": net_difference_abs,  # Always positive
+        "is_saving": is_saving,  # True if saving, False if excess
+        "percentage_deviation": round(percentage_deviation, 2)  # Percentage with 2 decimals
     }
 
     return first_page_data, last_page_data, deviation_data, extra_items_data, note_sheet_data

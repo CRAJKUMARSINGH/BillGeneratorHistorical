@@ -4,12 +4,53 @@
     <meta charset="UTF-8">
     <title>Extra Items</title>
     <style>
-        @page { size: A4 portrait; margin: 10mm 11mm; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Calibri, sans-serif; font-size: 8pt; margin: 0; line-height: 1.2; }
-        .container { width: 188mm; min-height: 277mm; margin: 0; padding: 0; }
-        table { width: 188mm; border-collapse: collapse; table-layout: fixed; font-size: 8pt; }
-        th, td { border: 1px solid black; padding: 3px 2px; text-align: left; vertical-align: top; overflow: hidden; word-wrap: break-word; }
+        @page { 
+            size: A4 portrait; 
+            margin: 10mm; 
+        }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        html {
+            zoom: 1.0;
+            -webkit-text-size-adjust: none;
+        }
+        body { 
+            font-family: Calibri, sans-serif; 
+            font-size: 8pt; 
+            margin: 0; 
+            line-height: 1.2;
+            width: 190mm;
+            max-width: 190mm;
+        }
+        .container { 
+            width: 190mm; 
+            max-width: 190mm;
+            min-height: 277mm; 
+            margin: 0; 
+            padding: 0; 
+        }
+        table { 
+            width: 190mm !important; 
+            max-width: 190mm !important;
+            min-width: 190mm !important;
+            border-collapse: collapse; 
+            table-layout: fixed !important; 
+            font-size: 8pt;
+        }
+        th, td { 
+            border: 1px solid black; 
+            padding: 3px 2px; 
+            text-align: left; 
+            vertical-align: top; 
+            overflow: hidden; 
+            word-wrap: break-word;
+            white-space: normal;
+        }
         .header { text-align: center; margin-bottom: 8px; }
         .header h2 { font-size: 11pt; margin-bottom: 4px; }
     </style>
@@ -21,23 +62,23 @@
         </div>
         <table>
             <colgroup>
-                <col style="width: 10.06mm;">
-                <col style="width: 11.96mm;">
-                <col style="width: 63.83mm;">
-                <col style="width: 13.76mm;">
-                <col style="width: 10.06mm;">
-                <col style="width: 13.16mm;">
-                <col style="width: 19.53mm;">
+                <col style="width: 12mm;">
+                <col style="width: 15mm;">
+                <col style="width: 80mm;">
+                <col style="width: 18mm;">
+                <col style="width: 12mm;">
+                <col style="width: 18mm;">
+                <col style="width: 35mm;">
             </colgroup>
             <thead>
                 <tr>
-                    <th>S. No.</th>
-                    <th>Remarks</th>
-                    <th>Description</th>
-                    <th>Quantity</th>
-                    <th>Unit</th>
-                    <th>Rate</th>
-                    <th>Amount</th>
+                    <th style="width: 12mm;">S. No.</th>
+                    <th style="width: 15mm;">Remarks</th>
+                    <th style="width: 80mm;">Description</th>
+                    <th style="width: 18mm;">Quantity</th>
+                    <th style="width: 12mm;">Unit</th>
+                    <th style="width: 18mm;">Rate</th>
+                    <th style="width: 35mm;">Amount</th>
                 </tr>
             </thead>
             <tbody>
