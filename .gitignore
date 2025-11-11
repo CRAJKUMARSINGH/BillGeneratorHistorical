@@ -51,6 +51,12 @@ uploaded_outputs/
 batch_outputs/
 *.pdf
 
+# Excel files (except test inputs)
+*.xlsx
+*.xls
+!test_input_files/*.xlsx
+!test_input_files/*.xls
+
 # Logs
 *.log
 
