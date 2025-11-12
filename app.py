@@ -62,10 +62,10 @@ def generate_pdf_from_html(html_path, pdf_path):
             result = subprocess.run(cmd, capture_output=True, timeout=60)
             
             if result.returncode == 0 and os.path.exists(pdf_path):
-                print(f"✅ PDF generated with Chrome: {pdf_path}")
+                st.info(f"✅ Using Chrome Headless (NO SHRINKING)")
                 return True
             else:
-                print(f"Chrome error: {result.stderr.decode() if result.stderr else 'Unknown'}")
+                st.warning(f"⚠️ Chrome failed, using wkhtmltopdf fallback")
         except Exception as e:
             print(f"Chrome exception: {str(e)}")
     
