@@ -264,6 +264,28 @@ def process_batch_files(excel_files):
                 st.warning("⚠️ PDF generation failed. Please check if wkhtmltopdf is installed.")
                 st.info("HTML files are still available in the batch_outputs folder.")
 
+def cleanup_old_files():
+    """Clean up old temporary files to prevent memory issues"""
+    try:
+        import time
+        current_time = time.time()
+        
+        # Clean files older than 1 hour
+        for folder in ['test_outputs', 'uploaded_outputs', 'batch_outputs']:
+            if os.path.exists(folder):
+                for root, dirs, files in os.walk(folder):
+                    for file in files:
+                        file_path = os.path.join(root, file)
+                        if os.path.exists(file_path):
+                            file_age = current_time - os.path.getmtime(file_path)
+                            if file_age > 3600:  # 1 hour
+                                try:
+                                    os.remove(file_path)
+                                except:
+                                    pass
+    except:
+        pass
+
 def main():
     st.set_page_config(
         page_title="Bill Generator Pro",
@@ -271,6 +293,9 @@ def main():
         layout="wide",
         initial_sidebar_state="expanded"
     )
+    
+    # Cleanup old files on startup
+    cleanup_old_files()
     
     # Custom CSS for beautiful green header
     st.markdown("""
