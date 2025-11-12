@@ -385,10 +385,6 @@ def main():
     st.sidebar.markdown("---")
     st.sidebar.markdown("""
         <div style='text-align: center; color: white; font-size: 0.85rem;'>
-            <p style='margin: 0.3rem 0;'><strong>Bill Generator Pro</strong></p>
-            <p style='margin: 0.3rem 0; opacity: 0.9;'>Powered by Chrome Headless</p>
-            <p style='margin: 0.3rem 0; opacity: 0.9;'>Version 2.0</p>
-            <hr style='margin: 0.8rem 0; border: none; border-top: 1px solid rgba(255,255,255,0.3);'>
             <p style='margin: 0.3rem 0; font-size: 0.75rem;'><strong>🌟 Prepared on Initiative of:</strong></p>
             <p style='margin: 0.3rem 0; color: #ffd700; font-weight: 600; font-size: 0.85rem;'>Mrs. Premlata Jain, AAO</p>
             <p style='margin: 0.3rem 0; font-size: 0.75rem; opacity: 0.9;'>PWD Udaipur</p>
