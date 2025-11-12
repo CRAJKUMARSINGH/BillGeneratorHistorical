@@ -373,19 +373,7 @@ def main():
     # Sidebar for mode selection
     st.sidebar.markdown("### ⚙️ Processing Options")
     
-    # Info box in sidebar
-    st.sidebar.markdown("""
-        <div style='background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 10px; 
-                    border-left: 4px solid #ffd700; margin: 1rem 0;'>
-            <p style='margin: 0; color: white; font-weight: 600;'>✨ Features:</p>
-            <ul style='margin: 0.5rem 0; padding-left: 1.5rem; color: white;'>
-                <li>📄 Zero-shrinking PDFs</li>
-                <li>🎨 Professional formatting</li>
-                <li>📦 Batch processing</li>
-                <li>⬇️ Instant downloads</li>
-            </ul>
-        </div>
-    """, unsafe_allow_html=True)
+
     
     mode = st.sidebar.radio(
         "Select Processing Mode",
