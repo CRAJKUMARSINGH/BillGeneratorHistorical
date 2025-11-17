@@ -3,11 +3,11 @@ Streamlit Integration for Optimized PDF Generator
 Handles Streamlit Cloud deployment constraints and provides user-friendly interface
 """
 
-import streamlit as st
-import os
-import sys
-from typing import Optional, Dict, Any
 import logging
+import os
+from typing import Any, Dict, Optional
+
+import streamlit as st
 
 # Import the optimized PDF generator
 try:

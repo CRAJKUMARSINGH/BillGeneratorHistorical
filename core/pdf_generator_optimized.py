@@ -4,12 +4,9 @@ Addresses: A4 page utilization, 10-15mm margins, landscape/portrait support
 Elegant HTML to PDF conversion with statutory compliance
 """
 
-import os
-import io
-import base64
-from typing import Optional, Dict, Any, Literal
-from pathlib import Path
 import logging
+import os
+from typing import Dict, Literal, Optional
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -82,7 +79,6 @@ class PDFGenerator:
         engines = []
         
         # Check for Chrome/Chromium (BEST - No shrinking!)
-        import subprocess
         import shutil
         chrome_paths = [
             shutil.which('google-chrome'),
@@ -367,7 +363,7 @@ class PDFGenerator:
     def html_to_pdf_weasyprint(self, html_content: str, output_path: str) -> bool:
         """Generate PDF using WeasyPrint (best quality)"""
         try:
-            from weasyprint import HTML, CSS
+            from weasyprint import CSS, HTML
             from weasyprint.text.fonts import FontConfiguration
             
             font_config = FontConfiguration()
@@ -402,13 +398,14 @@ class PDFGenerator:
     def html_to_pdf_reportlab(self, html_content: str, output_path: str) -> bool:
         """Generate PDF using ReportLab (fallback with HTML parsing)"""
         try:
-            from reportlab.lib.pagesizes import A4, landscape
-            from reportlab.lib.units import mm
-            from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-            from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-            from reportlab.lib import colors
             from bs4 import BeautifulSoup
-            
+            from reportlab.lib import colors
+            from reportlab.lib.pagesizes import A4, landscape
+            from reportlab.lib.styles import (getSampleStyleSheet)
+            from reportlab.lib.units import mm
+            from reportlab.platypus import (Paragraph, SimpleDocTemplate,
+                                            Table, TableStyle)
+
             # Set page size
             if self.orientation == 'landscape':
                 page_size = landscape(A4)
@@ -481,9 +478,9 @@ class PDFGenerator:
     def html_to_pdf_xhtml2pdf(self, html_content: str, output_path: str) -> bool:
         """Generate PDF using xhtml2pdf (good compatibility)"""
         try:
+
             from xhtml2pdf import pisa
-            from io import BytesIO
-            
+
             # Create PDF
             with open(output_path, "wb") as pdf_file:
                 pisa_status = pisa.CreatePDF(
@@ -495,7 +492,7 @@ class PDFGenerator:
                 logger.info(f"PDF generated successfully using xhtml2pdf: {output_path}")
                 return True
             else:
-                logger.error(f"xhtml2pdf generation failed with errors")
+                logger.error("xhtml2pdf generation failed with errors")
                 return False
                 
         except Exception as e:
@@ -505,10 +502,10 @@ class PDFGenerator:
     def html_to_pdf_chrome(self, html_content: str, output_path: str) -> bool:
         """Generate PDF using Chrome Headless (BEST - No shrinking!)"""
         try:
+            import shutil
             import subprocess
             import tempfile
-            import shutil
-            
+
             # Find Chrome executable
             chrome_paths = [
                 shutil.which('google-chrome'),
@@ -570,7 +567,7 @@ class PDFGenerator:
         """Generate PDF using pdfkit (basic but reliable)"""
         try:
             import pdfkit
-            
+
             # Configure options - ROCK SOLID ANTI-SHRINK SETTINGS (NO HEADERS/FOOTERS!)
             options = {
                 'page-size': 'A4',

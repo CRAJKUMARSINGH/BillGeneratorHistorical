@@ -2,8 +2,7 @@
 Configuration settings for the Stream Bill Generator
 This module manages application settings and branding information.
 """
-import os
-from typing import Dict, Any
+from typing import Any, Dict
 
 # Default settings
 DEFAULT_SETTINGS = {

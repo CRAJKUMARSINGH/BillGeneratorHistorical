@@ -3,8 +3,9 @@ Internationalization (i18n) support for the Stream Bill Generator
 This module provides localization support for multiple languages.
 """
 import os
+
 import yaml
-from typing import Dict, Any
+
 
 class I18nManager:
     """Internationalization manager for handling multiple languages"""

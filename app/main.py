@@ -5,19 +5,14 @@ SINGLE FILE DEPLOYMENT OPTIMIZED VERSION
 This is the ONLY entry point for the application.
 All functionality consolidated for maximum compatibility.
 """
-import streamlit as st
-import pandas as pd
 import os
 import sys
 import tempfile
 import zipfile
-import base64
 from io import BytesIO
-from functools import lru_cache
-from pathlib import Path
-import re
-import math
-from datetime import datetime
+
+import pandas as pd
+import streamlit as st
 
 # ============================================================================
 # CONSOLIDATED FUNCTIONALITY - ALL IN ONE FILE
@@ -58,11 +53,11 @@ except ImportError:
     DOCX_AVAILABLE = False
 
 try:
-    from pypdf import PdfWriter, PdfReader
+    from pypdf import PdfReader, PdfWriter
     PYPDF_AVAILABLE = True
 except ImportError:
     try:
-        from PyPDF2 import PdfWriter, PdfReader
+        from PyPDF2 import PdfReader, PdfWriter
         PYPDF_AVAILABLE = True
     except ImportError:
         PdfWriter = None
@@ -70,7 +65,7 @@ except ImportError:
         PYPDF_AVAILABLE = False
 
 try:
-    from jinja2 import Environment, BaseLoader
+    from jinja2 import BaseLoader, Environment
     JINJA2_AVAILABLE = True
 except ImportError:
     Environment = None

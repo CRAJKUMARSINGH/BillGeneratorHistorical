@@ -2,9 +2,11 @@
 Core computation logic for bill processing - extracted from streamlit_app.py
 This module contains the core business logic that should not be modified.
 """
-import pandas as pd
+from datetime import date, datetime
+
 import numpy as np
-from datetime import datetime, date
+import pandas as pd
+
 
 def safe_float(value, default=0.0):
     """Safely convert a value to float with proper error handling"""
@@ -30,7 +32,7 @@ def number_to_words(number):
     try:
         from num2words import num2words
         return num2words(int(number), lang="en_IN").title()
-    except (ImportError, ValueError, TypeError) as e:
+    except (ImportError, ValueError, TypeError):
         # Fallback if num2words not available or invalid number
         return str(number)
 
